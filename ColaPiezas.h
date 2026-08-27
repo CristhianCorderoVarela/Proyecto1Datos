@@ -19,5 +19,8 @@ void inicializarCola(ColaPiezas &cola);
 bool estaVacia(ColaPiezas cola);
 void encolar(ColaPiezas &cola, Pieza pieza);
 Pieza desencolar(ColaPiezas &cola);
+void generarBolsa(ColaPiezas &cola);
+void mostrarProximas(ColaPiezas cola, int cantidad);
+Pieza obtenerSiguientePieza(ColaPiezas &cola);
 
 #endif

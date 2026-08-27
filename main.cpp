@@ -1,37 +1,29 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "ColaPiezas.h"
 
 using namespace std;
 
 int main()
 {
-	ColaPiezas cola;
+	srand(time(nullptr));
 	
+	ColaPiezas cola;
 	inicializarCola(cola);
 	
-	Pieza p1;
-	p1.tipo = 'T';
+	generarBolsa(cola);
 	
-	Pieza p2;
-	p2.tipo = 'I';
+	cout << "Sacando 10 piezas:" << endl;
 	
-	Pieza p3;
-	p3.tipo = 'L';
+	for (int i = 0; i < 10; i++)
+	{
+		Pieza pieza = obtenerSiguientePieza(cola);
+		
+		cout << pieza.tipo << " ";
+	}
 	
-	encolar(cola, p1);
-	encolar(cola, p2);
-	encolar(cola, p3);
-	
-	Pieza actual;
-	
-	actual = desencolar(cola);
-	cout << "Sale: " << actual.tipo << endl;
-	
-	actual = desencolar(cola);
-	cout << "Sale: " << actual.tipo << endl;
-	
-	actual = desencolar(cola);
-	cout << "Sale: " << actual.tipo << endl;
+	cout << endl;
 	
 	return 0;
 }
