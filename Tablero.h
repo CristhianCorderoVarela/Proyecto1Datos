@@ -15,5 +15,7 @@ struct Tablero
 void inicializarTablero(Tablero &tablero);
 void mostrarTablero(Tablero tablero);
 void liberarTablero(Tablero &tablero);
+void modificarCelda(Tablero &tablero, int fila, int columna, int valor);
+bool filaCompleta(NodoFila *fila);
 
 #endif

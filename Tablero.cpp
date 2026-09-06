@@ -65,3 +65,39 @@ void liberarTablero(Tablero &tablero)
 	
 	tablero.inicio = nullptr;
 }
+
+
+bool filaCompleta(NodoFila *fila)
+{
+	if (fila == nullptr)
+	{
+		return false;
+	}
+	
+	for (int i = 0; i < 10; i++)
+	{
+		if (fila->celdas[i] == 0)
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+void modificarCelda(Tablero &tablero, int fila, int columna, int valor)
+{
+	if (fila < 0 || fila >= 20 || columna < 0 || columna >= 10)
+	{
+		return;
+	}
+	
+	NodoFila *actual = tablero.inicio;
+	
+	for (int i = 0; i < fila; i++)
+	{
+		actual = actual->siguiente;
+	}
+	
+	actual->celdas[columna] = valor;
+}
