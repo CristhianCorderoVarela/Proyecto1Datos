@@ -85,6 +85,22 @@ bool filaCompleta(NodoFila *fila)
 	return true;
 }
 
+
+void insertarFilaVaciaAlInicio(Tablero &tablero)
+{
+	NodoFila *nuevo = new NodoFila();
+	
+	for (int i = 0; i < 10; i++)
+	{
+		nuevo->celdas[i] = 0;
+	}
+	
+	nuevo->siguiente = tablero.inicio;
+	tablero.inicio = nuevo;
+}
+
+
+
 void modificarCelda(Tablero &tablero, int fila, int columna, int valor)
 {
 	if (fila < 0 || fila >= 20 || columna < 0 || columna >= 10)
@@ -100,4 +116,47 @@ void modificarCelda(Tablero &tablero, int fila, int columna, int valor)
 	}
 	
 	actual->celdas[columna] = valor;
+}
+
+
+int eliminarFilasCompletas(Tablero &tablero)
+{
+	NodoFila *actual = tablero.inicio;
+	NodoFila *anterior = nullptr;
+	
+	int eliminadas = 0;
+	
+	while (actual != nullptr)
+	{
+		if (filaCompleta(actual))
+		{
+			NodoFila *borrar = actual;
+			
+			if (anterior == nullptr)
+			{
+				tablero.inicio = actual->siguiente;
+				actual = tablero.inicio;
+			}
+			else
+			{
+				anterior->siguiente = actual->siguiente;
+				actual = actual->siguiente;
+			}
+			
+			delete borrar;
+			eliminadas++;
+		}
+		else
+		{
+			anterior = actual;
+			actual = actual->siguiente;
+		}
+	}
+	
+	for (int i = 0; i < eliminadas; i++)
+	{
+		insertarFilaVaciaAlInicio(tablero);
+	}
+	
+	return eliminadas;
 }

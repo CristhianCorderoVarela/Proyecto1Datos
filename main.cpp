@@ -8,32 +8,29 @@ int main()
 	Tablero tablero;
 	inicializarTablero(tablero);
 	
-	// Llenamos completamente la fila 5
+	// Algunas piezas en la fila 17
+	modificarCelda(tablero, 17, 3, 1);
+	modificarCelda(tablero, 17, 4, 1);
+	modificarCelda(tablero, 17, 5, 1);
+	
+	// Llenamos completamente las filas 18 y 19
 	for (int columna = 0; columna < 10; columna++)
 	{
-		modificarCelda(tablero, 5, columna, 1);
+		modificarCelda(tablero, 18, columna, 1);
+		modificarCelda(tablero, 19, columna, 1);
 	}
 	
-	cout << "TABLERO:" << endl;
+	cout << "ANTES DE LIMPIAR:" << endl;
 	mostrarTablero(tablero);
 	
-	NodoFila *fila = tablero.inicio;
-	
-	for (int i = 0; i < 5; i++)
-	{
-		fila = fila->siguiente;
-	}
+	int eliminadas = eliminarFilasCompletas(tablero);
 	
 	cout << endl;
+	cout << "Filas eliminadas: " << eliminadas << endl;
 	
-	if (filaCompleta(fila))
-	{
-		cout << "La fila 5 esta completa." << endl;
-	}
-	else
-	{
-		cout << "La fila 5 NO esta completa." << endl;
-	}
+	cout << endl;
+	cout << "DESPUES DE LIMPIAR:" << endl;
+	mostrarTablero(tablero);
 	
 	liberarTablero(tablero);
 	
