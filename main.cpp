@@ -1,38 +1,76 @@
 #include <iostream>
-#include "Tablero.h"
+#include "Pieza.h"
 
 using namespace std;
 
-int main()
+void mostrarForma(Pieza pieza)
 {
-	Tablero tablero;
-	inicializarTablero(tablero);
+	int bloques[4][2];
 	
-	// Algunas piezas en la fila 17
-	modificarCelda(tablero, 17, 3, 1);
-	modificarCelda(tablero, 17, 4, 1);
-	modificarCelda(tablero, 17, 5, 1);
+	obtenerBloques(pieza, bloques);
 	
-	// Llenamos completamente las filas 18 y 19
-	for (int columna = 0; columna < 10; columna++)
+	char forma[4][4];
+	
+	// Llenamos el espacio con puntos
+	for (int fila = 0; fila < 4; fila++)
 	{
-		modificarCelda(tablero, 18, columna, 1);
-		modificarCelda(tablero, 19, columna, 1);
+		for (int columna = 0; columna < 4; columna++)
+		{
+			forma[fila][columna] = '.';
+		}
 	}
 	
-	cout << "ANTES DE LIMPIAR:" << endl;
-	mostrarTablero(tablero);
+	// Colocamos los 4 bloques de la pieza
+	for (int i = 0; i < 4; i++)
+	{
+		int filaRelativa = bloques[i][0] - pieza.fila;
+		int columnaRelativa = bloques[i][1] - pieza.columna;
+		
+		if (filaRelativa >= 0 && filaRelativa < 4 &&
+			columnaRelativa >= 0 && columnaRelativa < 4)
+		{
+			forma[filaRelativa][columnaRelativa] = pieza.tipo;
+		}
+	}
 	
-	int eliminadas = eliminarFilasCompletas(tablero);
+	// Mostrar la forma
+	for (int fila = 0; fila < 4; fila++)
+	{
+		for (int columna = 0; columna < 4; columna++)
+		{
+			cout << forma[fila][columna] << " ";
+		}
+		
+		cout << endl;
+	}
+}
+
+int main()
+{
+	char tipos[7] = {'I', 'O', 'T', 'S', 'Z', 'J', 'L'};
 	
-	cout << endl;
-	cout << "Filas eliminadas: " << eliminadas << endl;
-	
-	cout << endl;
-	cout << "DESPUES DE LIMPIAR:" << endl;
-	mostrarTablero(tablero);
-	
-	liberarTablero(tablero);
+	for (int p = 0; p < 7; p++)
+	{
+		Pieza pieza;
+		
+		inicializarPieza(pieza, tipos[p]);
+		
+		cout << "====================" << endl;
+		cout << "PIEZA " << pieza.tipo << endl;
+		cout << "====================" << endl;
+		
+		for (int orientacion = 0; orientacion < 4; orientacion++)
+		{
+			pieza.orientacion = orientacion;
+			
+			cout << endl;
+			cout << "Orientacion " << orientacion << ":" << endl;
+			
+			mostrarForma(pieza);
+		}
+		
+		cout << endl;
+	}
 	
 	return 0;
 }

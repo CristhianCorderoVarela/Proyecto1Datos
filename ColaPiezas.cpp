@@ -78,7 +78,8 @@ void generarBolsa(ColaPiezas &cola)
 	for (int i = 0; i < 7; i++)
 	{
 		Pieza pieza;
-		pieza.tipo = tipos[i];
+		
+		inicializarPieza(pieza, tipos[i]);
 		
 		encolar(cola, pieza);
 	}
