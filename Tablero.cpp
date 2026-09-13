@@ -160,3 +160,107 @@ int eliminarFilasCompletas(Tablero &tablero)
 	
 	return eliminadas;
 }
+
+bool puedeColocarse(Tablero tablero, Pieza pieza)
+{
+	int bloques[4][2];
+	
+	obtenerBloques(pieza, bloques);
+	
+	for (int i = 0; i < 4; i++)
+	{
+		int fila = bloques[i][0];
+		int columna = bloques[i][1];
+		
+		// Verificar limites del tablero
+		if (fila < 0 || fila >= 20 ||
+			columna < 0 || columna >= 10)
+		{
+			return false;
+		}
+		
+		// Buscar la fila correspondiente
+		NodoFila *actual = tablero.inicio;
+		
+		for (int f = 0; f < fila; f++)
+		{
+			actual = actual->siguiente;
+		}
+		
+		// Verificar si la celda ya esta ocupada
+		if (actual->celdas[columna] != 0)
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+
+bool colocarPieza(Tablero &tablero, Pieza pieza)
+{
+	if (!puedeColocarse(tablero, pieza))
+	{
+		return false;
+	}
+	
+	int bloques[4][2];
+	
+	obtenerBloques(pieza, bloques);
+	
+	for (int i = 0; i < 4; i++)
+	{
+		int fila = bloques[i][0];
+		int columna = bloques[i][1];
+		
+		modificarCelda(tablero, fila, columna, 1);
+	}
+	
+	return true;
+}
+
+bool bajarPieza(Tablero tablero, Pieza &pieza)
+{
+	Pieza prueba = pieza;
+	
+	prueba.fila++;
+	
+	if (puedeColocarse(tablero, prueba))
+	{
+		pieza.fila++;
+		return true;
+	}
+	
+	return false;
+}
+
+bool moverPiezaHorizontal(Tablero tablero, Pieza &pieza, int direccion)
+{
+	Pieza prueba = pieza;
+	
+	prueba.columna += direccion;
+	
+	if (puedeColocarse(tablero, prueba))
+	{
+		pieza.columna = prueba.columna;
+		return true;
+	}
+	
+	return false;
+}
+
+bool rotarPiezaValida(Tablero tablero, Pieza &pieza)
+{
+	Pieza prueba = pieza;
+	
+	rotarPieza(prueba);
+	
+	if (puedeColocarse(tablero, prueba))
+	{
+		pieza.orientacion = prueba.orientacion;
+		return true;
+	}
+	
+	return false;
+}

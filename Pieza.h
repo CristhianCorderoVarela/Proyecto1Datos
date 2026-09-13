@@ -13,4 +13,5 @@ void inicializarPieza(Pieza &pieza, char tipo);
 void obtenerBloques(Pieza pieza, int bloques[4][2]);
 void rotarPieza(Pieza &pieza);
 
+
 #endif

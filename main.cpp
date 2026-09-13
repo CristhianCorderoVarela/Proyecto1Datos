@@ -1,76 +1,60 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+#include "ColaPiezas.h"
+#include "Tablero.h"
 #include "Pieza.h"
 
 using namespace std;
 
-void mostrarForma(Pieza pieza)
-{
-	int bloques[4][2];
-	
-	obtenerBloques(pieza, bloques);
-	
-	char forma[4][4];
-	
-	// Llenamos el espacio con puntos
-	for (int fila = 0; fila < 4; fila++)
-	{
-		for (int columna = 0; columna < 4; columna++)
-		{
-			forma[fila][columna] = '.';
-		}
-	}
-	
-	// Colocamos los 4 bloques de la pieza
-	for (int i = 0; i < 4; i++)
-	{
-		int filaRelativa = bloques[i][0] - pieza.fila;
-		int columnaRelativa = bloques[i][1] - pieza.columna;
-		
-		if (filaRelativa >= 0 && filaRelativa < 4 &&
-			columnaRelativa >= 0 && columnaRelativa < 4)
-		{
-			forma[filaRelativa][columnaRelativa] = pieza.tipo;
-		}
-	}
-	
-	// Mostrar la forma
-	for (int fila = 0; fila < 4; fila++)
-	{
-		for (int columna = 0; columna < 4; columna++)
-		{
-			cout << forma[fila][columna] << " ";
-		}
-		
-		cout << endl;
-	}
-}
-
 int main()
 {
-	char tipos[7] = {'I', 'O', 'T', 'S', 'Z', 'J', 'L'};
+	srand(time(nullptr));
 	
-	for (int p = 0; p < 7; p++)
+	Tablero tablero;
+	inicializarTablero(tablero);
+	
+	ColaPiezas cola;
+	inicializarCola(cola);
+	generarBolsa(cola);
+	
+	for (int turno = 1; turno <= 10; turno++)
 	{
-		Pieza pieza;
-		
-		inicializarPieza(pieza, tipos[p]);
-		
-		cout << "====================" << endl;
-		cout << "PIEZA " << pieza.tipo << endl;
-		cout << "====================" << endl;
-		
-		for (int orientacion = 0; orientacion < 4; orientacion++)
-		{
-			pieza.orientacion = orientacion;
-			
-			cout << endl;
-			cout << "Orientacion " << orientacion << ":" << endl;
-			
-			mostrarForma(pieza);
-		}
+		Pieza actual = obtenerSiguientePieza(cola);
 		
 		cout << endl;
+		cout << "Turno " << turno << endl;
+		cout << "Pieza: " << actual.tipo << endl;
+		
+		// Verificar si la nueva pieza puede aparecer
+		if (!puedeColocarse(tablero, actual))
+		{
+			cout << "GAME OVER" << endl;
+			break;
+		}
+		
+		// Dejar caer la pieza hasta que ya no pueda bajar
+		while (bajarPieza(tablero, actual))
+		{
+		}
+		
+		// Fijar la pieza en el tablero
+		colocarPieza(tablero, actual);
+		
+		// Revisar filas completas
+		int eliminadas = eliminarFilasCompletas(tablero);
+		
+		if (eliminadas > 0)
+		{
+			cout << "Filas eliminadas: "
+				<< eliminadas << endl;
+		}
+		
+		mostrarTablero(tablero);
 	}
+	
+	liberarTablero(tablero);
 	
 	return 0;
 }

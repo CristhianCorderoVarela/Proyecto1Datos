@@ -10,16 +10,16 @@ void inicializarPieza(Pieza &pieza, char tipo)
 
 void obtenerBloques(Pieza pieza, int bloques[4][2])
 {
-	// Inicializamos por seguridad
+
 	for (int i = 0; i < 4; i++)
 	{
 		bloques[i][0] = -1;
 		bloques[i][1] = -1;
 	}
 	
-	// =====================================================
+
 	// PIEZA I
-	// =====================================================
+
 	if (pieza.tipo == 'I')
 	{
 		if (pieza.orientacion == 0 || pieza.orientacion == 2)
@@ -52,9 +52,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		}
 	}
 	
-	// =====================================================
+	
 	// PIEZA O
-	// =====================================================
+
 	else if (pieza.tipo == 'O')
 	{
 		bloques[0][0] = pieza.fila;
@@ -70,9 +70,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		bloques[3][1] = pieza.columna + 1;
 	}
 	
-	// =====================================================
+	
 	// PIEZA T
-	// =====================================================
+
 	else if (pieza.tipo == 'T')
 	{
 		if (pieza.orientacion == 0)
@@ -143,9 +143,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		}
 	}
 	
-	// =====================================================
+
 	// PIEZA S
-	// =====================================================
+	
 	else if (pieza.tipo == 'S')
 	{
 		if (pieza.orientacion == 0 || pieza.orientacion == 2)
@@ -183,9 +183,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		}
 	}
 	
-	// =====================================================
+
 	// PIEZA Z
-	// =====================================================
+	
 	else if (pieza.tipo == 'Z')
 	{
 		if (pieza.orientacion == 0 || pieza.orientacion == 2)
@@ -223,9 +223,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		}
 	}
 	
-	// =====================================================
+
 	// PIEZA J
-	// =====================================================
+	
 	else if (pieza.tipo == 'J')
 	{
 		if (pieza.orientacion == 0)
@@ -296,9 +296,9 @@ void obtenerBloques(Pieza pieza, int bloques[4][2])
 		}
 	}
 	
-	// =====================================================
+
 	// PIEZA L
-	// =====================================================
+	
 	else if (pieza.tipo == 'L')
 	{
 		if (pieza.orientacion == 0)
