@@ -252,6 +252,7 @@ bool moverPiezaHorizontal(Tablero tablero, Pieza &pieza, int direccion)
 
 bool rotarPiezaValida(Tablero tablero, Pieza &pieza)
 {
+	
 	Pieza prueba = pieza;
 	
 	rotarPieza(prueba);
@@ -263,4 +264,44 @@ bool rotarPiezaValida(Tablero tablero, Pieza &pieza)
 	}
 	
 	return false;
+}
+
+
+void mostrarTableroConPieza(Tablero tablero, Pieza pieza)
+{
+	int bloques[4][2];
+	
+	obtenerBloques(pieza, bloques);
+	
+	NodoFila *actual = tablero.inicio;
+	
+	for (int fila = 0; fila < 20; fila++)
+	{
+		for (int columna = 0; columna < 10; columna++)
+		{
+			bool esPiezaActual = false;
+			
+			for (int i = 0; i < 4; i++)
+			{
+				if (bloques[i][0] == fila &&
+					bloques[i][1] == columna)
+				{
+					esPiezaActual = true;
+				}
+			}
+			
+			if (esPiezaActual)
+			{
+				cout << pieza.tipo << " ";
+			}
+			else
+			{
+				cout << actual->celdas[columna] << " ";
+			}
+		}
+		
+		cout << endl;
+		
+		actual = actual->siguiente;
+	}
 }
