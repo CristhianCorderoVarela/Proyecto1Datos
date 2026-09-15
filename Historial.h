@@ -46,4 +46,10 @@ bool rehacer(
 
 void liberarHistorial(Historial &historial);
 
+void reproducirHistorial(
+						 Historial &historial,
+						 Tablero &tablero,
+						 Pieza &pieza
+						 );
+
 #endif

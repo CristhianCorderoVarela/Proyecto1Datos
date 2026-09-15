@@ -66,6 +66,7 @@ int main()
 					);
 	
 	cout << "ESTADO ACTUAL:" << endl;
+	
 	mostrarTableroConPieza(
 						   tablero,
 						   pieza
@@ -112,6 +113,15 @@ int main()
 						   tablero,
 						   pieza
 						   );
+	
+	cout << endl;
+	cout << "REPRODUCCION COMPLETA:" << endl;
+	
+	reproducirHistorial(
+						historial,
+						tablero,
+						pieza
+						);
 	
 	liberarHistorial(historial);
 	liberarTablero(tablero);

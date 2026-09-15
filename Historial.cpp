@@ -1,5 +1,9 @@
 #include "Historial.h"
 
+#include <iostream>
+
+using namespace std;
+
 void copiarTablero(Tablero tablero, NodoHistorial *nodo)
 {
 	NodoFila *filaActual = tablero.inicio;
@@ -143,6 +147,7 @@ bool rehacer(
 
 void liberarHistorial(Historial &historial)
 {
+	
 	NodoHistorial *actual =
 		historial.primero;
 	
@@ -158,4 +163,43 @@ void liberarHistorial(Historial &historial)
 	historial.primero = nullptr;
 	historial.actual = nullptr;
 	historial.ultimo = nullptr;
+}
+
+
+void reproducirHistorial(
+						 Historial &historial,
+						 Tablero &tablero,
+						 Pieza &pieza)
+{
+	NodoHistorial *recorrido =
+		historial.primero;
+	
+	int paso = 0;
+	
+	while (recorrido != nullptr)
+	{
+		restaurarTablero(
+						 tablero,
+						 recorrido
+						 );
+		
+		pieza = recorrido->pieza;
+		
+		cout << endl;
+		cout << "====================" << endl;
+		cout << "PASO " << paso << endl;
+		cout << "Accion: "
+			<< recorrido->accion << endl;
+		cout << "====================" << endl;
+		
+		mostrarTableroConPieza(
+							   tablero,
+							   pieza
+							   );
+		
+		recorrido =
+			recorrido->siguiente;
+		
+		paso++;
+	}
 }
