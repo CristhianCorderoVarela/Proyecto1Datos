@@ -25,4 +25,11 @@ void dibujarEspera(
 				   PilaEspera pila
 				   );
 
+void dibujarInformacion(
+						sf::RenderWindow &ventana,
+						sf::Font &fuente,
+						int puntaje,
+						int lineasTotales
+						);
+
 #endif

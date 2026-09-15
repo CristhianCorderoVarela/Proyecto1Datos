@@ -14,19 +14,32 @@ using namespace std;
 bool fijarYCrearNuevaPieza(
 						   Tablero &tablero,
 						   ColaPiezas &cola,
-						   Pieza &pieza)
+						   Pieza &pieza,
+						   int &puntaje,
+						   int &lineasTotales)
 {
 	// Fijar la pieza que ya no puede bajar
 	colocarPieza(tablero, pieza);
 	
 	// Revisar si se completaron filas
 	int eliminadas = eliminarFilasCompletas(tablero);
-	
 	if (eliminadas > 0)
 	{
+		lineasTotales += eliminadas;
+		
+		puntaje += eliminadas * 100;
+		
 		cout << "Filas eliminadas: "
 			<< eliminadas << endl;
+		
+		cout << "Lineas totales: "
+			<< lineasTotales << endl;
+		
+		cout << "Puntaje: "
+			<< puntaje << endl;
 	}
+	
+	
 	
 	// Obtener la siguiente pieza
 	pieza = obtenerSiguientePieza(cola);
@@ -87,6 +100,15 @@ int main()
 							 "Tetris - Proyecto I"
 							 );
 	
+	sf::Font fuente;
+	
+	if (!fuente.loadFromFile(
+							 "C:/Windows/Fonts/arial.ttf"))
+	{
+		cout << "Error al cargar la fuente"
+			<< endl;
+	}
+	
 	// ==========================================
 	// CONTROL DEL TIEMPO DE CAIDA
 	// ==========================================
@@ -96,6 +118,9 @@ int main()
 	float tiempoCaida = 0.6f;
 	
 	bool juegoTerminado = false;
+	
+	int puntaje = 0;
+	int lineasTotales = 0;
 	
 	// ==========================================
 	// CICLO PRINCIPAL
@@ -154,7 +179,9 @@ int main()
 						if (!fijarYCrearNuevaPieza(
 												   tablero,
 												   cola,
-												   pieza))
+												   pieza,
+												   puntaje,
+												   lineasTotales))
 						{
 							juegoTerminado = true;
 							
@@ -264,7 +291,9 @@ int main()
 									  if (!fijarYCrearNuevaPieza(
 																 tablero,
 																 cola,
-																 pieza))
+																 pieza,
+																 puntaje,
+																 lineasTotales))
 									  {
 										  juegoTerminado = true;
 										  
@@ -301,7 +330,9 @@ int main()
 				if (!fijarYCrearNuevaPieza(
 										   tablero,
 										   cola,
-										   pieza))
+										   pieza,
+										   puntaje,
+										   lineasTotales))
 				{
 					juegoTerminado = true;
 					
@@ -340,6 +371,13 @@ int main()
 					  ventana,
 					  pila
 					  );
+		
+		dibujarInformacion(
+						   ventana,
+						   fuente,
+						   puntaje,
+						   lineasTotales
+						   );
 		
 		ventana.display();
 	}

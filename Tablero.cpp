@@ -214,7 +214,7 @@ bool colocarPieza(Tablero &tablero, Pieza pieza)
 		int fila = bloques[i][0];
 		int columna = bloques[i][1];
 		
-		modificarCelda(tablero, fila, columna, 1);
+		modificarCelda(tablero, fila, columna, pieza.tipo);
 	}
 	
 	return true;

@@ -1,4 +1,5 @@
 #include "Interfaz.h"
+#include <string>
 
 const int TAM_CELDA = 24;
 const int INICIO_X = 25;
@@ -62,10 +63,13 @@ void dibujarTablero(
 			else
 			{
 				celda.setFillColor(
-								   sf::Color(150, 150, 150)
+								   obtenerColorPieza(
+													 static_cast<char>(
+																	   actual->celdas[columna]
+																	   )
+													 )
 								   );
 			}
-			
 			ventana.draw(celda);
 		}
 		
@@ -268,4 +272,51 @@ void dibujarEspera(
 						 panelY + 18
 						 );
 	}
+}
+
+
+void dibujarInformacion(
+						sf::RenderWindow &ventana,
+						sf::Font &fuente,
+						int puntaje,
+						int lineasTotales)
+{
+	sf::Text textoPuntaje;
+	
+	textoPuntaje.setFont(fuente);
+	textoPuntaje.setCharacterSize(16);
+	textoPuntaje.setFillColor(sf::Color::White);
+	
+	textoPuntaje.setString(
+						   "Puntaje: " +
+						   std::to_string(puntaje)
+						   );
+	
+	textoPuntaje.setPosition(
+							 300,
+							 20
+							 );
+	
+	ventana.draw(textoPuntaje);
+	
+	
+	sf::Text textoLineas;
+	
+	textoLineas.setFont(fuente);
+	textoLineas.setCharacterSize(14);
+	textoLineas.setFillColor(
+							 sf::Color(200, 200, 200)
+							 );
+	
+	textoLineas.setString(
+						  "Lineas: " +
+						  std::to_string(lineasTotales)
+						  );
+	
+	textoLineas.setPosition(
+							300,
+							42
+							);
+	
+	ventana.draw(textoLineas);
 }
