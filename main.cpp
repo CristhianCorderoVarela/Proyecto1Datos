@@ -1,10 +1,8 @@
-#include <iostream>
+#include <SFML/Graphics.hpp>
 
 #include "Tablero.h"
 #include "Pieza.h"
-#include "Historial.h"
-
-using namespace std;
+#include "Interfaz.h"
 
 int main()
 {
@@ -12,118 +10,99 @@ int main()
 	inicializarTablero(tablero);
 	
 	Pieza pieza;
-	inicializarPieza(pieza, 'T');
-	
-	Historial historial;
-	inicializarHistorial(historial);
-	
-	// Estado inicial
-	registrarEstado(
-					historial,
-					tablero,
-					pieza,
-					'I'
-					);
-	
-	// Mover derecha
-	moverPiezaHorizontal(
-						 tablero,
-						 pieza,
-						 1
-						 );
-	
-	registrarEstado(
-					historial,
-					tablero,
-					pieza,
-					'D'
-					);
-	
-	// Bajar
-	bajarPieza(
-			   tablero,
-			   pieza
-			   );
-	
-	registrarEstado(
-					historial,
-					tablero,
-					pieza,
-					'S'
-					);
-	
-	// Rotar
-	rotarPiezaValida(
-					 tablero,
-					 pieza
+	inicializarPieza(
+					 pieza,
+					 'T'
 					 );
 	
-	registrarEstado(
-					historial,
-					tablero,
-					pieza,
-					'W'
-					);
+	sf::RenderWindow ventana(
+							 sf::VideoMode(450, 550),
+							 "Tetris - Proyecto I"
+							 );
 	
-	cout << "ESTADO ACTUAL:" << endl;
+	while (ventana.isOpen())
+	{
+		sf::Event evento;
+		
+		while (ventana.pollEvent(evento))
+		{
+			if (evento.type == sf::Event::Closed)
+			{
+				ventana.close();
+			}
+			
+			if (evento.type == sf::Event::KeyPressed)
+			{
+				// IZQUIERDA
+				if (evento.key.code == sf::Keyboard::A)
+				{
+					moverPiezaHorizontal(
+										 tablero,
+										 pieza,
+										 -1
+										 );
+				}
+				
+				// DERECHA
+				else if (evento.key.code == sf::Keyboard::D)
+				{
+					moverPiezaHorizontal(
+										 tablero,
+										 pieza,
+										 1
+										 );
+				}
+				
+				// BAJAR
+				else if (evento.key.code == sf::Keyboard::S)
+				{
+					bajarPieza(
+							   tablero,
+							   pieza
+							   );
+				}
+				
+				// ROTAR
+				else if (evento.key.code == sf::Keyboard::W)
+				{
+					rotarPiezaValida(
+									 tablero,
+									 pieza
+									 );
+				}
+				
+				// CAIDA COMPLETA
+				else if (evento.key.code == sf::Keyboard::X)
+				{
+					while (bajarPieza(
+									  tablero,
+									  pieza
+									  ))
+					{
+					}
+				}
+				
+				// CERRAR CON ESC
+				else if (evento.key.code == sf::Keyboard::Escape)
+				{
+					ventana.close();
+				}
+			}
+		}
+		
+		ventana.clear(
+					  sf::Color::Black
+					  );
+		
+		dibujarTablero(
+					   ventana,
+					   tablero,
+					   pieza
+					   );
+		
+		ventana.display();
+	}
 	
-	mostrarTableroConPieza(
-						   tablero,
-						   pieza
-						   );
-	
-	cout << endl;
-	cout << "DESHACER:" << endl;
-	
-	deshacer(
-			 historial,
-			 tablero,
-			 pieza
-			 );
-	
-	mostrarTableroConPieza(
-						   tablero,
-						   pieza
-						   );
-	
-	cout << endl;
-	cout << "DESHACER OTRA VEZ:" << endl;
-	
-	deshacer(
-			 historial,
-			 tablero,
-			 pieza
-			 );
-	
-	mostrarTableroConPieza(
-						   tablero,
-						   pieza
-						   );
-	
-	cout << endl;
-	cout << "REHACER:" << endl;
-	
-	rehacer(
-			historial,
-			tablero,
-			pieza
-			);
-	
-	mostrarTableroConPieza(
-						   tablero,
-						   pieza
-						   );
-	
-	cout << endl;
-	cout << "REPRODUCCION COMPLETA:" << endl;
-	
-	reproducirHistorial(
-						historial,
-						tablero,
-						pieza
-						);
-	
-	liberarHistorial(historial);
 	liberarTablero(tablero);
 	
 	return 0;
