@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Tablero.h"
 #include "Pieza.h"
+#include "ColaPiezas.h"
 
 sf::Color obtenerColorPieza(char tipo);
 
@@ -12,5 +13,10 @@ void dibujarTablero(
 					Tablero tablero,
 					Pieza pieza
 					);
+
+void dibujarProximas(
+					 sf::RenderWindow &ventana,
+					 ColaPiezas cola
+					 );
 
 #endif

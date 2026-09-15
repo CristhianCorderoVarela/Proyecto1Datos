@@ -105,3 +105,125 @@ void dibujarTablero(
 		ventana.draw(bloque);
 	}
 }
+
+
+
+void dibujarMiniPieza(
+					  sf::RenderWindow &ventana,
+					  char tipo,
+					  float posicionX,
+					  float posicionY)
+{
+	Pieza pieza;
+	
+	inicializarPieza(
+					 pieza,
+					 tipo
+					 );
+	
+	int bloques[4][2];
+	
+	obtenerBloques(
+				   pieza,
+				   bloques
+				   );
+	
+	int filaMinima = bloques[0][0];
+	int columnaMinima = bloques[0][1];
+	
+	for (int i = 1; i < 4; i++)
+	{
+		if (bloques[i][0] < filaMinima)
+		{
+			filaMinima = bloques[i][0];
+		}
+		
+		if (bloques[i][1] < columnaMinima)
+		{
+			columnaMinima = bloques[i][1];
+		}
+	}
+	
+	const int TAM_PREVIA = 16;
+	
+	for (int i = 0; i < 4; i++)
+	{
+		int fila =
+			bloques[i][0] - filaMinima;
+			
+			int columna =
+				bloques[i][1] - columnaMinima;
+				
+				sf::RectangleShape bloque(
+										  sf::Vector2f(
+													   TAM_PREVIA - 1,
+													   TAM_PREVIA - 1
+													   )
+										  );
+				
+				bloque.setPosition(
+								   posicionX +
+								   columna * TAM_PREVIA,
+								   posicionY +
+								   fila * TAM_PREVIA
+								   );
+				
+				bloque.setFillColor(
+									obtenerColorPieza(tipo)
+									);
+				
+				ventana.draw(bloque);
+	}
+}
+
+void dibujarProximas(
+					 sf::RenderWindow &ventana,
+					 ColaPiezas cola)
+{
+	NodoPieza *actual =
+		cola.frente;
+	
+	float panelX = 300;
+	float panelY = 70;
+	
+	for (int i = 0;
+	i < 3 && actual != nullptr;
+	i++)
+	{
+		// Marco para cada pieza
+		sf::RectangleShape marco(
+								 sf::Vector2f(
+											  110,
+											  100
+											  )
+								 );
+		
+		marco.setPosition(
+						  panelX,
+						  panelY + i * 130
+						  );
+		
+		marco.setFillColor(
+						   sf::Color(20, 20, 20)
+						   );
+		
+		marco.setOutlineThickness(2);
+		
+		marco.setOutlineColor(
+							  sf::Color(80, 80, 80)
+							  );
+		
+		ventana.draw(marco);
+		
+		// Dibujar la pieza
+		dibujarMiniPieza(
+						 ventana,
+						 actual->pieza.tipo,
+						 panelX + 22,
+						 panelY + 28 + i * 130
+						 );
+		
+		actual =
+			actual->siguiente;
+	}
+}

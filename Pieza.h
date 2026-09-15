@@ -7,6 +7,7 @@ struct Pieza
 	int fila;
 	int columna;
 	int orientacion;
+	int numeroBolsa;
 };
 
 void inicializarPieza(Pieza &pieza, char tipo);

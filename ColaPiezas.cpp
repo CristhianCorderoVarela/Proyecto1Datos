@@ -9,6 +9,7 @@ void inicializarCola(ColaPiezas &cola)
 {
 	cola.frente = nullptr;
 	cola.final = nullptr;
+	cola.ultimaBolsaGenerada = 0;
 }
 
 bool estaVacia(ColaPiezas cola)
@@ -64,24 +65,40 @@ Pieza desencolar(ColaPiezas &cola)
 
 void generarBolsa(ColaPiezas &cola)
 {
-	char tipos[7] = {'I', 'O', 'T', 'S', 'Z', 'J', 'L'};
+	char tipos[7] =
+	{
+		'I', 'O', 'T', 'S', 'Z', 'J', 'L'
+	};
 	
+	// Mezclar las 7 piezas
 	for (int i = 6; i > 0; i--)
 	{
 		int j = rand() % (i + 1);
 		
-		char aux = tipos[i];
+		char auxiliar = tipos[i];
 		tipos[i] = tipos[j];
-		tipos[j] = aux;
+		tipos[j] = auxiliar;
 	}
+	
+	// Esta es una nueva bolsa completa
+	cola.ultimaBolsaGenerada++;
 	
 	for (int i = 0; i < 7; i++)
 	{
 		Pieza pieza;
 		
-		inicializarPieza(pieza, tipos[i]);
+		inicializarPieza(
+						 pieza,
+						 tipos[i]
+						 );
 		
-		encolar(cola, pieza);
+		pieza.numeroBolsa =
+			cola.ultimaBolsaGenerada;
+		
+		encolar(
+				cola,
+				pieza
+				);
 	}
 }
 
@@ -110,4 +127,31 @@ Pieza obtenerSiguientePieza(ColaPiezas &cola)
 	}
 	
 	return desencolar(cola);
+}
+
+int contarPiezas(ColaPiezas cola)
+{
+	int cantidad = 0;
+	
+	NodoPieza *actual =
+		cola.frente;
+	
+	while (actual != nullptr)
+	{
+		cantidad++;
+		
+		actual =
+			actual->siguiente;
+	}
+	
+	return cantidad;
+}
+
+void asegurarProximasPiezas(
+							ColaPiezas &cola)
+{
+	if (contarPiezas(cola) < 3)
+	{
+		generarBolsa(cola);
+	}
 }

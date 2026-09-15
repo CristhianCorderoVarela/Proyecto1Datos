@@ -6,6 +6,7 @@ void inicializarPieza(Pieza &pieza, char tipo)
 	pieza.fila = 0;
 	pieza.columna = 3;
 	pieza.orientacion = 0;
+	pieza.numeroBolsa = 0;
 }
 
 void obtenerBloques(Pieza pieza, int bloques[4][2])

@@ -1,24 +1,75 @@
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 
 #include "Tablero.h"
 #include "Pieza.h"
+#include "ColaPiezas.h"
 #include "Interfaz.h"
+
+using namespace std;
+
+bool fijarYCrearNuevaPieza(
+						   Tablero &tablero,
+						   ColaPiezas &cola,
+						   Pieza &pieza)
+{
+	// Fijar la pieza que ya no puede bajar
+	colocarPieza(tablero, pieza);
+	
+	// Revisar si se completaron filas
+	int eliminadas = eliminarFilasCompletas(tablero);
+	
+	if (eliminadas > 0)
+	{
+		cout << "Filas eliminadas: "
+			<< eliminadas << endl;
+	}
+	
+	// Obtener la siguiente pieza
+	pieza = obtenerSiguientePieza(cola);
+	asegurarProximasPiezas(cola);
+	
+	// Verificar si puede aparecer
+	if (!puedeColocarse(tablero, pieza))
+	{
+		return false;
+	}
+	
+	return true;
+}
 
 int main()
 {
+	srand(time(nullptr));
+	
+	// TABLERO
 	Tablero tablero;
 	inicializarTablero(tablero);
 	
-	Pieza pieza;
-	inicializarPieza(
-					 pieza,
-					 'T'
-					 );
+	// COLA DE PIEZAS
+	ColaPiezas cola;
+	inicializarCola(cola);
+	generarBolsa(cola);
 	
+	// PRIMERA PIEZA
+	Pieza pieza;
+	pieza = obtenerSiguientePieza(cola);
+	asegurarProximasPiezas(cola);
+	
+	// VENTANA
 	sf::RenderWindow ventana(
 							 sf::VideoMode(450, 550),
 							 "Tetris - Proyecto I"
 							 );
+	
+	// CONTROL DEL TIEMPO DE CAIDA
+	sf::Clock relojCaida;
+	
+	float tiempoCaida = 0.6f;
+	
+	bool juegoTerminado = false;
 	
 	while (ventana.isOpen())
 	{
@@ -31,7 +82,8 @@ int main()
 				ventana.close();
 			}
 			
-			if (evento.type == sf::Event::KeyPressed)
+			if (evento.type == sf::Event::KeyPressed &&
+				!juegoTerminado)
 			{
 				// IZQUIERDA
 				if (evento.key.code == sf::Keyboard::A)
@@ -53,13 +105,25 @@ int main()
 										 );
 				}
 				
-				// BAJAR
+				// BAJAR UNA FILA
 				else if (evento.key.code == sf::Keyboard::S)
 				{
-					bajarPieza(
-							   tablero,
-							   pieza
-							   );
+					if (!bajarPieza(tablero, pieza))
+					{
+						if (!fijarYCrearNuevaPieza(
+												   tablero,
+												   cola,
+												   pieza))
+						{
+							juegoTerminado = true;
+							
+							ventana.setTitle(
+											 "GAME OVER - Tetris"
+											 );
+						}
+					}
+					
+					relojCaida.restart();
 				}
 				
 				// ROTAR
@@ -76,19 +140,63 @@ int main()
 				{
 					while (bajarPieza(
 									  tablero,
-									  pieza
-									  ))
+									  pieza))
 					{
 					}
+									  
+									  if (!fijarYCrearNuevaPieza(
+																 tablero,
+																 cola,
+																 pieza))
+									  {
+										  juegoTerminado = true;
+										  
+										  ventana.setTitle(
+														   "GAME OVER - Tetris"
+														   );
+									  }
+																 
+																 relojCaida.restart();
 				}
 				
-				// CERRAR CON ESC
-				else if (evento.key.code == sf::Keyboard::Escape)
+				// CERRAR
+				else if (evento.key.code ==
+						 sf::Keyboard::Escape)
 				{
 					ventana.close();
 				}
 			}
 		}
+		
+		// ==========================================
+		// CAIDA AUTOMATICA
+		// ==========================================
+		
+		if (!juegoTerminado &&
+			relojCaida.getElapsedTime().asSeconds()
+			>= tiempoCaida)
+		{
+			if (!bajarPieza(tablero, pieza))
+			{
+				if (!fijarYCrearNuevaPieza(
+										   tablero,
+										   cola,
+										   pieza))
+				{
+					juegoTerminado = true;
+					
+					ventana.setTitle(
+									 "GAME OVER - Tetris"
+									 );
+				}
+			}
+			
+			relojCaida.restart();
+		}
+		
+		// ==========================================
+		// DIBUJAR
+		// ==========================================
 		
 		ventana.clear(
 					  sf::Color::Black
@@ -99,6 +207,11 @@ int main()
 					   tablero,
 					   pieza
 					   );
+		
+		dibujarProximas(
+						ventana,
+						cola
+						);
 		
 		ventana.display();
 	}

@@ -13,6 +13,7 @@ struct ColaPiezas
 {
 	NodoPieza *frente;
 	NodoPieza *final;
+	int ultimaBolsaGenerada;
 };
 
 void inicializarCola(ColaPiezas &cola);
@@ -22,5 +23,7 @@ Pieza desencolar(ColaPiezas &cola);
 void generarBolsa(ColaPiezas &cola);
 void mostrarProximas(ColaPiezas cola, int cantidad);
 Pieza obtenerSiguientePieza(ColaPiezas &cola);
+int contarPiezas(ColaPiezas cola);
+void asegurarProximasPiezas(ColaPiezas &cola);
 
 #endif
