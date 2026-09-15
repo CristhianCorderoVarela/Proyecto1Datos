@@ -175,13 +175,11 @@ void dibujarMiniPieza(
 				ventana.draw(bloque);
 	}
 }
-
 void dibujarProximas(
 					 sf::RenderWindow &ventana,
 					 ColaPiezas cola)
 {
-	NodoPieza *actual =
-		cola.frente;
+	NodoPieza *actual = cola.frente;
 	
 	float panelX = 300;
 	float panelY = 70;
@@ -223,7 +221,51 @@ void dibujarProximas(
 						 panelY + 28 + i * 130
 						 );
 		
-		actual =
-			actual->siguiente;
+		actual = actual->siguiente;
+	}
+}
+
+void dibujarEspera(
+				   sf::RenderWindow &ventana,
+				   PilaEspera pila)
+{
+	float panelX = 300;
+	float panelY = 455;
+	
+	sf::RectangleShape marco(
+							 sf::Vector2f(
+										  110,
+										  75
+										  )
+							 );
+	
+	marco.setPosition(
+					  panelX,
+					  panelY
+					  );
+	
+	marco.setFillColor(
+					   sf::Color(20, 20, 20)
+					   );
+	
+	marco.setOutlineThickness(2);
+	
+	marco.setOutlineColor(
+						  sf::Color(80, 80, 80)
+						  );
+	
+	ventana.draw(marco);
+	
+	if (!estaVaciaPila(pila))
+	{
+		Pieza espera =
+			verPiezaEspera(pila);
+		
+		dibujarMiniPieza(
+						 ventana,
+						 espera.tipo,
+						 panelX + 22,
+						 panelY + 18
+						 );
 	}
 }

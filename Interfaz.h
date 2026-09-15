@@ -5,6 +5,7 @@
 #include "Tablero.h"
 #include "Pieza.h"
 #include "ColaPiezas.h"
+#include "PilaEspera.h"
 
 sf::Color obtenerColorPieza(char tipo);
 
@@ -18,5 +19,10 @@ void dibujarProximas(
 					 sf::RenderWindow &ventana,
 					 ColaPiezas cola
 					 );
+
+void dibujarEspera(
+				   sf::RenderWindow &ventana,
+				   PilaEspera pila
+				   );
 
 #endif
