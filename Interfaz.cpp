@@ -106,6 +106,16 @@ void dibujarTablero(
 											  )
 							);
 		
+		
+		if (pieza.especial)
+		{
+			bloque.setOutlineThickness(3);
+			
+			bloque.setOutlineColor(
+								   sf::Color::White
+								   );
+		}
+		
 		ventana.draw(bloque);
 	}
 }
