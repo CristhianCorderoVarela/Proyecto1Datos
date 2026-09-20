@@ -12,44 +12,174 @@
 
 using namespace std;
 
+void procesarEventos(
+					 ColaEventos &colaEventos,
+					 int lineasTotales,
+					 int &puntaje,
+					 float &tiempoCaida,
+					 bool &especialPendiente)
+{
+	Evento proximoEvento;
+	
+	while (
+		   verProximoEvento(
+							colaEventos,
+							proximoEvento
+							)
+		   &&
+		   lineasTotales >=
+		   proximoEvento.momento)
+	{
+		Evento eventoActivado;
+		
+		extraerEvento(
+					  colaEventos,
+					  eventoActivado
+					  );
+		
+		if (eventoActivado.tipo ==
+			AUMENTAR_VELOCIDAD)
+		{
+			tiempoCaida = 0.45f;
+			
+			cout
+				<< "EVENTO ACTIVADO: "
+				<< "AUMENTAR VELOCIDAD"
+				<< endl;
+			
+			cout
+				<< "Nuevo tiempo de caida: "
+				<< tiempoCaida
+				<< " segundos"
+				<< endl;
+		}
+		
+		else if (eventoActivado.tipo ==
+				 BONO_PUNTOS)
+		{
+			puntaje += 500;
+			
+			cout
+				<< "EVENTO ACTIVADO: "
+				<< "BONO DE PUNTOS"
+				<< endl;
+			
+			cout
+				<< "Bono: +500 puntos"
+				<< endl;
+			
+			cout
+				<< "Puntaje total: "
+				<< puntaje
+				<< endl;
+		}
+		
+		else if (eventoActivado.tipo ==
+				 PIEZA_ESPECIAL)
+		{
+			especialPendiente = true;
+			
+			cout
+				<< "EVENTO ACTIVADO: "
+				<< "PIEZA ESPECIAL"
+				<< endl;
+			
+			cout
+				<< "La siguiente pieza "
+				<< "sera especial"
+				<< endl;
+		}
+	}
+}
+
 bool fijarYCrearNuevaPieza(
 						   Tablero &tablero,
 						   ColaPiezas &cola,
 						   Pieza &pieza,
 						   int &puntaje,
-						   int &lineasTotales)
+						   int &lineasTotales,
+						   ColaEventos &colaEventos,
+						   float &tiempoCaida,
+						   bool &especialPendiente)
 {
-	// Fijar la pieza que ya no puede bajar
-	colocarPieza(tablero, pieza);
+	bool eraEspecial =
+		pieza.especial;
 	
-	// Revisar si se completaron filas
+	colocarPieza(
+				 tablero,
+				 pieza
+				 );
+	
 	int eliminadas =
-		eliminarFilasCompletas(tablero);
+		eliminarFilasCompletas(
+							   tablero
+							   );
 	
 	if (eliminadas > 0)
 	{
-		lineasTotales += eliminadas;
+		lineasTotales +=
+			eliminadas;
 		
-		puntaje += eliminadas * 100;
+		puntaje +=
+			eliminadas * 100;
 		
-		cout << "Filas eliminadas: "
-			<< eliminadas << endl;
+		cout
+			<< "Filas eliminadas: "
+			<< eliminadas
+			<< endl;
 		
-		cout << "Lineas totales: "
-			<< lineasTotales << endl;
+		cout
+			<< "Lineas totales: "
+			<< lineasTotales
+			<< endl;
 		
-		cout << "Puntaje: "
-			<< puntaje << endl;
+		cout
+			<< "Puntaje: "
+			<< puntaje
+			<< endl;
 	}
 	
-	// Obtener la siguiente pieza
+	if (eraEspecial)
+	{
+		if (eliminarFilaInferiorOcupada(
+										tablero))
+		{
+			cout
+				<< "EFECTO ESPECIAL: "
+				<< "fila eliminada"
+				<< endl;
+		}
+	}
+	
+	procesarEventos(
+					colaEventos,
+					lineasTotales,
+					puntaje,
+					tiempoCaida,
+					especialPendiente
+					);
+	
 	pieza =
-		obtenerSiguientePieza(cola);
+		obtenerSiguientePieza(
+							  cola
+							  );
 	
-	// Mantener al menos 3 piezas futuras
-	asegurarProximasPiezas(cola);
+	asegurarProximasPiezas(
+						   cola
+						   );
 	
-	// Verificar si la nueva pieza puede aparecer
+	if (especialPendiente)
+	{
+		pieza.especial = true;
+		
+		especialPendiente =
+			false;
+		
+		cout
+			<< "PIEZA ESPECIAL CREADA"
+			<< endl;
+	}
+	
 	if (!puedeColocarse(
 						tablero,
 						pieza))
@@ -64,42 +194,26 @@ int main()
 {
 	srand(time(nullptr));
 	
-	// ==========================================
-	// TABLERO
-	// ==========================================
-	
 	Tablero tablero;
 	inicializarTablero(tablero);
-	
-	// ==========================================
-	// COLA DE PIEZAS
-	// ==========================================
 	
 	ColaPiezas cola;
 	inicializarCola(cola);
 	generarBolsa(cola);
 	
-	// ==========================================
-	// PILA DE ESPERA
-	// ==========================================
-	
 	PilaEspera pila;
 	inicializarPila(pila);
-	
-	// ==========================================
-	// PRIMERA PIEZA
-	// ==========================================
 	
 	Pieza pieza;
 	
 	pieza =
-		obtenerSiguientePieza(cola);
+		obtenerSiguientePieza(
+							  cola
+							  );
 	
-	asegurarProximasPiezas(cola);
-	
-	// ==========================================
-	// VENTANA
-	// ==========================================
+	asegurarProximasPiezas(
+						   cola
+						   );
 	
 	sf::RenderWindow ventana(
 							 sf::VideoMode(450, 550),
@@ -111,30 +225,27 @@ int main()
 	if (!fuente.loadFromFile(
 							 "C:/Windows/Fonts/arial.ttf"))
 	{
-		cout << "Error al cargar la fuente"
+		cout
+			<< "Error al cargar la fuente"
 			<< endl;
 	}
 							 
-							 // ==========================================
-							 // CONTROL DEL TIEMPO DE CAIDA
-							 // ==========================================
-							 
 							 sf::Clock relojCaida;
 							 
-							 float tiempoCaida = 0.6f;
+							 float tiempoCaida =
+								 0.6f;
 							 
-							 bool juegoTerminado = false;
+							 bool juegoTerminado =
+								 false;
 							 
-							 // ==========================================
-							 // PUNTAJE Y LINEAS
-							 // ==========================================
+							 int puntaje =
+								 0;
 							 
-							 int puntaje = 0;
-							 int lineasTotales = 0;
+							 int lineasTotales =
+								 0;
 							 
-							 // ==========================================
-							 // COLA DE EVENTOS
-							 // ==========================================
+							 bool especialPendiente =
+								 false;
 							 
 							 ColaEventos colaEventos;
 							 
@@ -142,101 +253,76 @@ int main()
 													colaEventos
 													);
 							 
-							 // ------------------------------------------
-							 // EVENTO 1
-							 // PIEZA ESPECIAL EN 7 LINEAS
-							 // ------------------------------------------
-							 
 							 Evento eventoEspecial;
 							 
 							 eventoEspecial.tipo =
 								 PIEZA_ESPECIAL;
 							 
-							 eventoEspecial.momento = 7;
+							 eventoEspecial.momento =
+								 7;
 							 
 							 insertarEvento(
 											colaEventos,
 											eventoEspecial
 											);
 							 
-							 // ------------------------------------------
-							 // EVENTO 2
-							 // AUMENTAR VELOCIDAD EN 3 LINEAS
-							 // ------------------------------------------
-							 
 							 Evento eventoVelocidad;
 							 
 							 eventoVelocidad.tipo =
 								 AUMENTAR_VELOCIDAD;
 							 
-							 eventoVelocidad.momento = 3;
+							 eventoVelocidad.momento =
+								 3;
 							 
 							 insertarEvento(
 											colaEventos,
 											eventoVelocidad
 											);
 							 
-							 // ------------------------------------------
-							 // EVENTO 3
-							 // BONO DE PUNTOS EN 5 LINEAS
-							 // ------------------------------------------
-							 
 							 Evento eventoBono;
 							 
 							 eventoBono.tipo =
 								 BONO_PUNTOS;
 							 
-							 eventoBono.momento = 5;
+							 eventoBono.momento =
+								 5;
 							 
 							 insertarEvento(
 											colaEventos,
 											eventoBono
 											);
 							 
-							 // ------------------------------------------
-							 // MOSTRAR EVENTOS PARA PROBAR EL ORDEN
-							 // ------------------------------------------
-							 
-							 cout << "EVENTOS PROGRAMADOS:"
+							 cout
+								 << "EVENTOS PROGRAMADOS:"
 								 << endl;
 							 
 							 mostrarEventos(
 											colaEventos
 											);
 							 
-							 // ==========================================
-							 // CICLO PRINCIPAL
-							 // ==========================================
-							 
 							 while (ventana.isOpen())
 							 {
 								 sf::Event evento;
 								 
-								 while (ventana.pollEvent(evento))
+								 while (
+										ventana.pollEvent(
+														  evento
+														  ))
 								 {
-									 // ==================================
-									 // CERRAR VENTANA
-									 // ==================================
-									 
 									 if (evento.type ==
 										 sf::Event::Closed)
 									 {
 										 ventana.close();
 									 }
 									 
-									 // ==================================
-									 // CONTROLES DEL JUEGO
-									 // ==================================
-									 
-									 if (evento.type ==
-										 sf::Event::KeyPressed &&
+									 if (
+										 evento.type ==
+										 sf::Event::KeyPressed
+										 &&
 										 !juegoTerminado)
 									 {
-										 // ==============================
-										 // IZQUIERDA
-										 // ==============================
-										 
-										 if (evento.key.code ==
+										 if (
+											 evento.key.code ==
 											 sf::Keyboard::A)
 										 {
 											 moverPiezaHorizontal(
@@ -245,40 +331,40 @@ int main()
 																  -1
 																  );
 										 }
-										 
-										 // ==============================
-										 // DERECHA
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+											 
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::D)
-										 {
+											 {
 											 moverPiezaHorizontal(
 																  tablero,
 																  pieza,
 																  1
 																  );
-										 }
-										 
-										 // ==============================
-										 // BAJAR UNA FILA
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+											 }
+												  
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::S)
-										 {
+												  {
 											 if (!bajarPieza(
 															 tablero,
 															 pieza))
 											 {
-												 if (!fijarYCrearNuevaPieza(
+												 if (
+													 !fijarYCrearNuevaPieza(
 																			tablero,
 																			cola,
 																			pieza,
 																			puntaje,
-																			lineasTotales))
+																			lineasTotales,
+																			colaEventos,
+																			tiempoCaida,
+																			especialPendiente
+																			))
 												 {
-													 juegoTerminado = true;
+													 juegoTerminado =
+														 true;
 													 
 													 ventana.setTitle(
 																	  "GAME OVER - Tetris"
@@ -287,30 +373,26 @@ int main()
 											 }
 															 
 															 relojCaida.restart();
-										 }
-										 
-										 // ==============================
-										 // ROTAR
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+												  }
+												  
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::W)
-										 {
+												  {
 											 rotarPiezaValida(
 															  tablero,
 															  pieza
 															  );
-										 }
-										 
-										 // ==============================
-										 // PIEZA EN ESPERA - HOLD
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+												  }
+												  
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::H)
-										 {
-											 // Si la pila esta vacia
-											 if (estaVaciaPila(pila))
+												  {
+											 if (
+												 estaVaciaPila(
+															   pila
+															   ))
 											 {
 												 Pieza guardar;
 												 
@@ -318,6 +400,12 @@ int main()
 																  guardar,
 																  pieza.tipo
 																  );
+												 
+												 guardar.especial =
+													 pieza.especial;
+												 
+												 guardar.numeroBolsa =
+													 pieza.numeroBolsa;
 												 
 												 apilar(
 														pila,
@@ -334,68 +422,89 @@ int main()
 																		);
 											 }
 											 else
-											 {
-												 // Sacar la pieza guardada
-												 Pieza guardada =
-													 desapilar(pila);
-												 
-												 // Guardar la pieza actual
-												 Pieza guardar;
-												 
-												 inicializarPieza(
-																  guardar,
-																  pieza.tipo
-																  );
-												 
-												 apilar(
-														pila,
-														guardar
-														);
-												 
-												 // Convertir la guardada
-												 // en la nueva pieza actual
-												 inicializarPieza(
-																  pieza,
-																  guardada.tipo
-																  );
-											 }
-											 
-											 // Verificar si puede aparecer
-											 if (!puedeColocarse(
-																 tablero,
-																 pieza))
-											 {
-												 juegoTerminado = true;
-												 
-												 ventana.setTitle(
-																  "GAME OVER - Tetris"
-																  );
-											 }
-																 
-																 relojCaida.restart();
-										 }
-										 
-										 // ==============================
-										 // CAIDA COMPLETA
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+															   {
+																   Pieza guardada =
+																	   desapilar(
+																				 pila
+																				 );
+																   
+																   Pieza guardar;
+																   
+																   inicializarPieza(
+																					guardar,
+																					pieza.tipo
+																					);
+																   
+																   guardar.especial =
+																	   pieza.especial;
+																   
+																   guardar.numeroBolsa =
+																	   pieza.numeroBolsa;
+																   
+																   apilar(
+																		  pila,
+																		  guardar
+																		  );
+																   
+																   bool especialGuardada =
+																	   guardada.especial;
+																   
+																   int bolsaGuardada =
+																	   guardada.numeroBolsa;
+																   
+																   inicializarPieza(
+																					pieza,
+																					guardada.tipo
+																					);
+																   
+																   pieza.especial =
+																	   especialGuardada;
+																   
+																   pieza.numeroBolsa =
+																	   bolsaGuardada;
+															   }
+															   
+															   if (!puedeColocarse(
+																				   tablero,
+																				   pieza))
+															   {
+																   juegoTerminado =
+																	   true;
+																   
+																   ventana.setTitle(
+																					"GAME OVER - Tetris"
+																					);
+															   }
+																				   
+																				   relojCaida.restart();
+												  }
+												  
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::X)
-										 {
-											 while (bajarPieza(
+												  {
+											 while (
+													bajarPieza(
 															   tablero,
-															   pieza))
+															   pieza
+															   ))
 											 {
 											 }
 															   
-															   if (!fijarYCrearNuevaPieza(
+															   if (
+																   !fijarYCrearNuevaPieza(
 																						  tablero,
 																						  cola,
 																						  pieza,
 																						  puntaje,
-																						  lineasTotales))
+																						  lineasTotales,
+																						  colaEventos,
+																						  tiempoCaida,
+																						  especialPendiente
+																						  ))
 															   {
-																   juegoTerminado = true;
+																   juegoTerminado =
+																	   true;
 																   
 																   ventana.setTitle(
 																					"GAME OVER - Tetris"
@@ -403,106 +512,98 @@ int main()
 															   }
 																						  
 																						  relojCaida.restart();
-										 }
-										 
-										 // ==============================
-										 // CERRAR CON ESC
-										 // ==============================
-										 
-										 else if (evento.key.code ==
+												  }
+												  
+										 else if (
+												  evento.key.code ==
 												  sf::Keyboard::Escape)
-										 {
+												  {
 											 ventana.close();
-										 }
+												  }
 									 }
 								 }
-								 
-								 // ==========================================
-								 // CAIDA AUTOMATICA
-								 // ==========================================
-								 
-								 if (!juegoTerminado &&
-									 relojCaida
-									 .getElapsedTime()
-									 .asSeconds()
-									 >= tiempoCaida)
-								 {
-									 if (!bajarPieza(
-													 tablero,
-													 pieza))
-									 {
-										 if (!fijarYCrearNuevaPieza(
-																	tablero,
-																	cola,
-																	pieza,
-																	puntaje,
-																	lineasTotales))
-										 {
-											 juegoTerminado = true;
-											 
-											 ventana.setTitle(
-															  "GAME OVER - Tetris"
-															  );
-										 }
-									 }
-													 
-													 relojCaida.restart();
-								 }
-								 
-								 // ==========================================
-								 // DIBUJAR
-								 // ==========================================
-								 
-								 ventana.clear(
-											   sf::Color::Black
-											   );
-								 
-								 // Tablero y pieza actual
-								 dibujarTablero(
-												ventana,
-												tablero,
-												pieza
-												);
-								 
-								 // Proximas 3 piezas
-								 dibujarProximas(
-												 ventana,
-												 cola
-												 );
-								 
-								 // Pieza en espera
-								 dibujarEspera(
-											   ventana,
-											   pila
-											   );
-								 
-								 // Puntaje y lineas
-								 dibujarInformacion(
-													ventana,
-													fuente,
-													puntaje,
-													lineasTotales
-													);
-								 
-								 ventana.display();
+														  
+														  if (
+															  !juegoTerminado
+															  &&
+															  relojCaida
+															  .getElapsedTime()
+															  .asSeconds()
+															  >= tiempoCaida)
+														  {
+															  if (!bajarPieza(
+																			  tablero,
+																			  pieza))
+															  {
+																  if (
+																	  !fijarYCrearNuevaPieza(
+																							 tablero,
+																							 cola,
+																							 pieza,
+																							 puntaje,
+																							 lineasTotales,
+																							 colaEventos,
+																							 tiempoCaida,
+																							 especialPendiente
+																							 ))
+																  {
+																	  juegoTerminado =
+																		  true;
+																	  
+																	  ventana.setTitle(
+																					   "GAME OVER - Tetris"
+																					   );
+																  }
+															  }
+																			  
+																			  relojCaida.restart();
+														  }
+															  
+															  ventana.clear(
+																			sf::Color::Black
+																			);
+															  
+															  dibujarTablero(
+																			 ventana,
+																			 tablero,
+																			 pieza
+																			 );
+															  
+															  dibujarProximas(
+																			  ventana,
+																			  cola
+																			  );
+															  
+															  dibujarEspera(
+																			ventana,
+																			pila
+																			);
+															  
+															  dibujarInformacion(
+																				 ventana,
+																				 fuente,
+																				 puntaje,
+																				 lineasTotales
+																				 );
+															  
+															  ventana.display();
 							 }
 							 
-							 // ==========================================
-							 // LIBERAR MEMORIA
-							 // ==========================================
-							 
-							 if (!estaVaciaPila(pila))
+							 if (!estaVaciaPila(
+												pila))
 							 {
-								 desapilar(pila);
+								 desapilar(
+										   pila
+										   );
 							 }
-							 
-							 liberarColaEventos(
-												colaEventos
-												);
-							 
-							 liberarTablero(
-											tablero
-											);
-							 
-							 return 0;
+												
+												liberarColaEventos(
+																   colaEventos
+																   );
+												
+												liberarTablero(
+															   tablero
+															   );
+												
+												return 0;
 }

@@ -36,11 +36,14 @@ void dibujarTablero(
 					Tablero tablero,
 					Pieza pieza)
 {
-	NodoFila *actual = tablero.inicio;
+	NodoFila *actual =
+		tablero.inicio;
 	
 	for (int fila = 0; fila < 20; fila++)
 	{
-		for (int columna = 0; columna < 10; columna++)
+		for (int columna = 0;
+		columna < 10;
+		columna++)
 		{
 			sf::RectangleShape celda(
 									 sf::Vector2f(
@@ -50,8 +53,10 @@ void dibujarTablero(
 									 );
 			
 			celda.setPosition(
-							  INICIO_X + columna * TAM_CELDA,
-							  INICIO_Y + fila * TAM_CELDA
+							  INICIO_X +
+							  columna * TAM_CELDA,
+							  INICIO_Y +
+							  fila * TAM_CELDA
 							  );
 			
 			if (actual->celdas[columna] == 0)
@@ -70,10 +75,12 @@ void dibujarTablero(
 													 )
 								   );
 			}
+			
 			ventana.draw(celda);
 		}
 		
-		actual = actual->siguiente;
+		actual =
+			actual->siguiente;
 	}
 	
 	int bloques[4][2];
@@ -85,48 +92,51 @@ void dibujarTablero(
 	
 	for (int i = 0; i < 4; i++)
 	{
-		int fila = bloques[i][0];
-		int columna = bloques[i][1];
-		
-		sf::RectangleShape bloque(
-								  sf::Vector2f(
-											   TAM_CELDA - 1,
-											   TAM_CELDA - 1
-											   )
-								  );
-		
-		bloque.setPosition(
-						   INICIO_X + columna * TAM_CELDA,
-						   INICIO_Y + fila * TAM_CELDA
-						   );
-		
-		bloque.setFillColor(
-							obtenerColorPieza(
-											  pieza.tipo
-											  )
-							);
-		
-		
-		if (pieza.especial)
-		{
-			bloque.setOutlineThickness(3);
+		int fila =
+			bloques[i][0];
 			
-			bloque.setOutlineColor(
-								   sf::Color::White
+			int columna =
+				bloques[i][1];
+				
+				sf::RectangleShape bloque(
+										  sf::Vector2f(
+													   TAM_CELDA - 1,
+													   TAM_CELDA - 1
+													   )
+										  );
+				
+				bloque.setPosition(
+								   INICIO_X +
+								   columna * TAM_CELDA,
+								   INICIO_Y +
+								   fila * TAM_CELDA
 								   );
-		}
-		
-		ventana.draw(bloque);
+				
+				bloque.setFillColor(
+									obtenerColorPieza(
+													  pieza.tipo
+													  )
+									);
+				
+				if (pieza.especial)
+				{
+					bloque.setOutlineThickness(3);
+					
+					bloque.setOutlineColor(
+										   sf::Color::White
+										   );
+				}
+				
+				ventana.draw(bloque);
 	}
 }
-
-
 
 void dibujarMiniPieza(
 					  sf::RenderWindow &ventana,
 					  char tipo,
 					  float posicionX,
-					  float posicionY)
+					  float posicionY,
+					  bool especial)
 {
 	Pieza pieza;
 	
@@ -142,67 +152,87 @@ void dibujarMiniPieza(
 				   bloques
 				   );
 	
-	int filaMinima = bloques[0][0];
-	int columnaMinima = bloques[0][1];
-	
-	for (int i = 1; i < 4; i++)
-	{
-		if (bloques[i][0] < filaMinima)
-		{
-			filaMinima = bloques[i][0];
-		}
+	int filaMinima =
+		bloques[0][0];
 		
-		if (bloques[i][1] < columnaMinima)
-		{
-			columnaMinima = bloques[i][1];
-		}
-	}
-	
-	const int TAM_PREVIA = 16;
-	
-	for (int i = 0; i < 4; i++)
-	{
-		int fila =
-			bloques[i][0] - filaMinima;
+		int columnaMinima =
+			bloques[0][1];
 			
-			int columna =
-				bloques[i][1] - columnaMinima;
+			for (int i = 1; i < 4; i++)
+			{
+				if (bloques[i][0] <
+					filaMinima)
+				{
+					filaMinima =
+						bloques[i][0];
+				}
 				
-				sf::RectangleShape bloque(
-										  sf::Vector2f(
-													   TAM_PREVIA - 1,
-													   TAM_PREVIA - 1
-													   )
-										  );
-				
-				bloque.setPosition(
-								   posicionX +
-								   columna * TAM_PREVIA,
-								   posicionY +
-								   fila * TAM_PREVIA
-								   );
-				
-				bloque.setFillColor(
-									obtenerColorPieza(tipo)
-									);
-				
-				ventana.draw(bloque);
-	}
+				if (bloques[i][1] <
+					columnaMinima)
+				{
+					columnaMinima =
+						bloques[i][1];
+				}
+			}
+			
+			const int TAM_PREVIA = 16;
+			
+			for (int i = 0; i < 4; i++)
+			{
+				int fila =
+					bloques[i][0] -
+						filaMinima;
+					
+					int columna =
+						bloques[i][1] -
+							columnaMinima;
+						
+						sf::RectangleShape bloque(
+												  sf::Vector2f(
+															   TAM_PREVIA - 1,
+															   TAM_PREVIA - 1
+															   )
+												  );
+						
+						bloque.setPosition(
+										   posicionX +
+										   columna * TAM_PREVIA,
+										   posicionY +
+										   fila * TAM_PREVIA
+										   );
+						
+						bloque.setFillColor(
+											obtenerColorPieza(tipo)
+											);
+						
+						if (especial)
+						{
+							bloque.setOutlineThickness(2);
+							
+							bloque.setOutlineColor(
+												   sf::Color::White
+												   );
+						}
+						
+						ventana.draw(bloque);
+			}
 }
+
 void dibujarProximas(
 					 sf::RenderWindow &ventana,
 					 ColaPiezas cola)
 {
-	NodoPieza *actual = cola.frente;
+	NodoPieza *actual =
+		cola.frente;
 	
 	float panelX = 300;
 	float panelY = 70;
 	
 	for (int i = 0;
-	i < 3 && actual != nullptr;
+	i < 3 &&
+		actual != nullptr;
 	i++)
 	{
-		// Marco para cada pieza
 		sf::RectangleShape marco(
 								 sf::Vector2f(
 											  110,
@@ -227,15 +257,17 @@ void dibujarProximas(
 		
 		ventana.draw(marco);
 		
-		// Dibujar la pieza
 		dibujarMiniPieza(
 						 ventana,
 						 actual->pieza.tipo,
 						 panelX + 22,
-						 panelY + 28 + i * 130
+						 panelY + 28 +
+						 i * 130,
+						 false
 						 );
 		
-		actual = actual->siguiente;
+		actual =
+			actual->siguiente;
 	}
 }
 
@@ -279,11 +311,11 @@ void dibujarEspera(
 						 ventana,
 						 espera.tipo,
 						 panelX + 22,
-						 panelY + 18
+						 panelY + 18,
+						 espera.especial
 						 );
 	}
 }
-
 
 void dibujarInformacion(
 						sf::RenderWindow &ventana,
@@ -293,9 +325,17 @@ void dibujarInformacion(
 {
 	sf::Text textoPuntaje;
 	
-	textoPuntaje.setFont(fuente);
-	textoPuntaje.setCharacterSize(16);
-	textoPuntaje.setFillColor(sf::Color::White);
+	textoPuntaje.setFont(
+						 fuente
+						 );
+	
+	textoPuntaje.setCharacterSize(
+								  16
+								  );
+	
+	textoPuntaje.setFillColor(
+							  sf::Color::White
+							  );
 	
 	textoPuntaje.setString(
 						   "Puntaje: " +
@@ -307,20 +347,29 @@ void dibujarInformacion(
 							 20
 							 );
 	
-	ventana.draw(textoPuntaje);
-	
+	ventana.draw(
+				 textoPuntaje
+				 );
 	
 	sf::Text textoLineas;
 	
-	textoLineas.setFont(fuente);
-	textoLineas.setCharacterSize(14);
+	textoLineas.setFont(
+						fuente
+						);
+	
+	textoLineas.setCharacterSize(
+								 14
+								 );
+	
 	textoLineas.setFillColor(
 							 sf::Color(200, 200, 200)
 							 );
 	
 	textoLineas.setString(
 						  "Lineas: " +
-						  std::to_string(lineasTotales)
+						  std::to_string(
+										 lineasTotales
+										 )
 						  );
 	
 	textoLineas.setPosition(
@@ -328,5 +377,7 @@ void dibujarInformacion(
 							42
 							);
 	
-	ventana.draw(textoLineas);
+	ventana.draw(
+				 textoLineas
+				 );
 }

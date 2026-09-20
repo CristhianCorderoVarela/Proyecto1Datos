@@ -305,3 +305,72 @@ void mostrarTableroConPieza(Tablero tablero, Pieza pieza)
 		actual = actual->siguiente;
 	}
 }
+
+bool eliminarFilaInferiorOcupada(
+								 Tablero &tablero)
+{
+	NodoFila *actual =
+		tablero.inicio;
+	
+	NodoFila *anterior =
+		nullptr;
+	
+	NodoFila *filaEliminar =
+		nullptr;
+	
+	NodoFila *anteriorEliminar =
+		nullptr;
+	
+	while (actual != nullptr)
+	{
+		bool ocupada = false;
+		
+		for (int i = 0; i < 10; i++)
+		{
+			if (actual->celdas[i] != 0)
+			{
+				ocupada = true;
+				break;
+			}
+		}
+		
+		if (ocupada)
+		{
+			filaEliminar =
+				actual;
+			
+			anteriorEliminar =
+				anterior;
+		}
+		
+		anterior =
+			actual;
+		
+		actual =
+			actual->siguiente;
+	}
+	
+	if (filaEliminar == nullptr)
+	{
+		return false;
+	}
+	
+	if (anteriorEliminar == nullptr)
+	{
+		tablero.inicio =
+			filaEliminar->siguiente;
+	}
+	else
+	{
+		anteriorEliminar->siguiente =
+			filaEliminar->siguiente;
+	}
+	
+	delete filaEliminar;
+	
+	insertarFilaVaciaAlInicio(
+							  tablero
+							  );
+	
+	return true;
+}

@@ -29,4 +29,8 @@ bool moverPiezaHorizontal(Tablero tablero, Pieza &pieza, int direccion);
 bool rotarPiezaValida(Tablero tablero, Pieza &pieza);
 void mostrarTableroConPieza(Tablero tablero, Pieza pieza);
 
+bool eliminarFilaInferiorOcupada(
+								 Tablero &tablero
+								 );
+
 #endif
