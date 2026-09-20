@@ -395,50 +395,30 @@ void dibujarControlesReplay(
 		return;
 	}
 	
-	sf::RectangleShape fondo(
-							 sf::Vector2f(
-										  400,
-										  85
-										  )
+	sf::RectangleShape panel(
+							 sf::Vector2f(400, 85)
 							 );
 	
-	fondo.setPosition(
+	panel.setPosition(
 					  25,
 					  550
 					  );
 	
-	fondo.setFillColor(
-					   sf::Color(
-								 0,
-								 0,
-								 0,
-								 210
-								 )
+	panel.setFillColor(
+					   sf::Color(15, 15, 15)
 					   );
 	
-	fondo.setOutlineThickness(2);
+	panel.setOutlineThickness(2);
 	
-	fondo.setOutlineColor(
+	panel.setOutlineColor(
 						  sf::Color::White
 						  );
 	
-	ventana.draw(
-				 fondo
-				 );
+	ventana.draw(panel);
 	
 	sf::Text titulo;
 	
-	titulo.setFont(
-				   fuente
-				   );
-	
-	titulo.setCharacterSize(
-							22
-							);
-	
-	titulo.setFillColor(
-						sf::Color::White
-						);
+	titulo.setFont(fuente);
 	
 	if (!modoReplay)
 	{
@@ -459,45 +439,40 @@ void dibujarControlesReplay(
 						 );
 	}
 	
+	titulo.setCharacterSize(19);
+	
+	titulo.setFillColor(
+						sf::Color::White
+						);
+	
 	titulo.setPosition(
 					   40,
 					   558
 					   );
 	
-	ventana.draw(
-				 titulo
-				 );
+	ventana.draw(titulo);
 	
 	sf::Text controles;
 	
-	controles.setFont(
-					  fuente
-					  );
-	
-	controles.setCharacterSize(
-							   13
-							   );
-	
-	controles.setFillColor(
-						   sf::Color(
-									 220,
-									 220,
-									 220
-									 )
-						   );
+	controles.setFont(fuente);
 	
 	controles.setString(
-						"R - Replay   Z - Atras   Y - Adelante   ESC - Salir"
+						"R - Replay   Z - Atras   Y - Adelante\n"
+						"T - Top 10   N - Nuevo   ESC - Salir"
 						);
+	
+	controles.setCharacterSize(12);
+	
+	controles.setFillColor(
+						   sf::Color(190, 190, 190)
+						   );
 	
 	controles.setPosition(
 						  40,
-						  590
+						  588
 						  );
 	
-	ventana.draw(
-				 controles
-				 );
+	ventana.draw(controles);
 }
 
 
@@ -1207,7 +1182,7 @@ void dibujarPantallaConfiguracion(
 	cambiar.setFont(fuente);
 	
 	cambiar.setString(
-					  "TAB - Cambiar algoritmo"
+					  "FLECHA DERECHA - Cambiar algoritmo"
 					  );
 	
 	cambiar.setCharacterSize(14);
@@ -1281,6 +1256,175 @@ void dibujarPantallaConfiguracion(
 }
 
 
-
+void dibujarTop10(
+				  sf::RenderWindow &ventana,
+				  sf::Font &fuente,
+				  RegistroPuntaje registros[],
+				  int cantidad)
+{
+	sf::RectangleShape panel(
+							 sf::Vector2f(400, 560)
+							 );
+	
+	panel.setPosition(35, 45);
+	
+	panel.setFillColor(
+					   sf::Color(15, 15, 15)
+					   );
+	
+	panel.setOutlineThickness(2);
+	
+	panel.setOutlineColor(
+						  sf::Color(120, 120, 120)
+						  );
+	
+	ventana.draw(panel);
+	
+	sf::Text titulo;
+	
+	titulo.setFont(fuente);
+	titulo.setString("TOP 10");
+	titulo.setCharacterSize(32);
+	titulo.setFillColor(
+						sf::Color::White
+						);
+	
+	sf::FloatRect limites =
+		titulo.getLocalBounds();
+	
+	titulo.setPosition(
+					   (470 - limites.width) / 2,
+					   70
+					   );
+	
+	ventana.draw(titulo);
+	
+	if (cantidad == 0)
+	{
+		sf::Text vacio;
+		
+		vacio.setFont(fuente);
+		
+		vacio.setString(
+						"No hay puntajes registrados"
+						);
+		
+		vacio.setCharacterSize(17);
+		
+		vacio.setFillColor(
+						   sf::Color(180, 180, 180)
+						   );
+		
+		vacio.setPosition(
+						  105,
+						  180
+						  );
+		
+		ventana.draw(vacio);
+	}
+	else
+	{
+		int limite =
+			cantidad;
+		
+		if (limite > 10)
+		{
+			limite = 10;
+		}
+		
+		for (
+			 int i = 0;
+			 i < limite;
+			 i++)
+		{
+			sf::Text posicion;
+			
+			posicion.setFont(fuente);
+			
+			posicion.setString(
+							   std::to_string(i + 1)
+							   + "."
+							   );
+			
+			posicion.setCharacterSize(18);
+			
+			posicion.setFillColor(
+								  sf::Color::White
+								  );
+			
+			posicion.setPosition(
+								 70,
+								 135 + i * 38
+								 );
+			
+			ventana.draw(posicion);
+			
+			sf::Text nombre;
+			
+			nombre.setFont(fuente);
+			
+			nombre.setString(
+							 registros[i].nombre
+							 );
+			
+			nombre.setCharacterSize(18);
+			
+			nombre.setFillColor(
+								sf::Color::White
+								);
+			
+			nombre.setPosition(
+							   110,
+							   135 + i * 38
+							   );
+			
+			ventana.draw(nombre);
+			
+			sf::Text puntos;
+			
+			puntos.setFont(fuente);
+			
+			puntos.setString(
+							 std::to_string(
+											registros[i].puntaje
+											)
+							 );
+			
+			puntos.setCharacterSize(18);
+			
+			puntos.setFillColor(
+								sf::Color::White
+								);
+			
+			puntos.setPosition(
+							   330,
+							   135 + i * 38
+							   );
+			
+			ventana.draw(puntos);
+		}
+	}
+	
+	sf::Text controles;
+	
+	controles.setFont(fuente);
+	
+	controles.setString(
+						"T - Volver   N - Nuevo juego   ESC - Salir"
+						);
+	
+	controles.setCharacterSize(13);
+	
+	controles.setFillColor(
+						   sf::Color(180, 180, 180)
+						   );
+	
+	controles.setPosition(
+						  85,
+						  565
+						  );
+	
+	ventana.draw(controles);
+}
 
 
