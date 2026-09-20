@@ -225,7 +225,7 @@ int main()
 						   );
 	
 	sf::RenderWindow ventana(
-							 sf::VideoMode(450, 550),
+							 sf::VideoMode(470, 650),
 							 "Tetris - Proyecto I"
 							 );
 	
@@ -252,6 +252,9 @@ int main()
 								 false;
 							 
 							 bool replayAutomatico =
+								 false;
+							 
+							 bool modoReplay =
 								 false;
 							 
 							 int puntaje =
@@ -500,25 +503,12 @@ int main()
 																			replayAutomatico =
 																				false;
 																			
+																			modoReplay =
+																				false;
+																			
 																			ventana.setTitle(
 																							 "GAME OVER - Tetris"
 																							 );
-																			
-																			cout
-																				<< "GAME OVER"
-																				<< endl;
-																			
-																			cout
-																				<< "R = Replay"
-																				<< endl;
-																			
-																			cout
-																				<< "Z = Retroceder"
-																				<< endl;
-																			
-																			cout
-																				<< "Y = Avanzar"
-																				<< endl;
 																		}
 																	}
 																	
@@ -628,6 +618,9 @@ int main()
 																		   replayAutomatico =
 																			   false;
 																		   
+																		   modoReplay =
+																			   false;
+																		   
 																		   ventana.setTitle(
 																							"GAME OVER - Tetris"
 																							);
@@ -706,25 +699,12 @@ int main()
 																		   replayAutomatico =
 																			   false;
 																		   
+																		   modoReplay =
+																			   false;
+																		   
 																		   ventana.setTitle(
 																							"GAME OVER - Tetris"
 																							);
-																		   
-																		   cout
-																			   << "GAME OVER"
-																			   << endl;
-																		   
-																		   cout
-																			   << "R = Replay"
-																			   << endl;
-																		   
-																		   cout
-																			   << "Z = Retroceder"
-																			   << endl;
-																		   
-																		   cout
-																			   << "Y = Avanzar"
-																			   << endl;
 																	   }
 																	   
 																	   relojCaida.restart();
@@ -802,32 +782,63 @@ int main()
 													 evento.key.code ==
 													 sf::Keyboard::R)
 												 {
-													 if (
-														 irInicioHistorial(
-																		   historial,
-																		   tablero,
-																		   pieza,
-																		   puntaje,
-																		   lineasTotales,
-																		   tiempoCaida,
-																		   especialPendiente,
-																		   pila,
-																		   cola,
-																		   colaEventos
-																		   ))
+													 if (!modoReplay)
 													 {
-														 replayAutomatico =
+														 if (
+															 irInicioHistorial(
+																			   historial,
+																			   tablero,
+																			   pieza,
+																			   puntaje,
+																			   lineasTotales,
+																			   tiempoCaida,
+																			   especialPendiente,
+																			   pila,
+																			   cola,
+																			   colaEventos
+																			   ))
+														 {
+															 modoReplay =
+																 true;
+															 
+															 replayAutomatico =
+																 true;
+															 
+															 relojReplay.restart();
+															 
+															 ventana.setTitle(
+																			  "REPLAY - Tetris"
+																			  );
+														 }
+													 }
+													 else
+													 {
+														 if (
+															 historial.actual ==
+															 historial.ultimo)
+														 {
+															 irInicioHistorial(
+																			   historial,
+																			   tablero,
+																			   pieza,
+																			   puntaje,
+																			   lineasTotales,
+																			   tiempoCaida,
+																			   especialPendiente,
+																			   pila,
+																			   cola,
+																			   colaEventos
+																			   );
+														 }
+															 
+															 replayAutomatico =
 															 true;
-														 
-														 relojReplay.restart();
-														 
-														 ventana.setTitle(
-																		  "REPLAY - Tetris"
-																		  );
-														 
-														 cout
-															 << "REPLAY INICIADO"
-															 << endl;
+															 
+															 relojReplay.restart();
+															 
+															 ventana.setTitle(
+																			  "REPLAY - Tetris"
+																			  );
 													 }
 												 }
 													 
@@ -838,23 +849,24 @@ int main()
 													 replayAutomatico =
 														 false;
 													 
-													 if (
-														 deshacer(
-																  historial,
-																  tablero,
-																  pieza,
-																  puntaje,
-																  lineasTotales,
-																  tiempoCaida,
-																  especialPendiente,
-																  pila,
-																  cola,
-																  colaEventos
-																  ))
+													 deshacer(
+															  historial,
+															  tablero,
+															  pieza,
+															  puntaje,
+															  lineasTotales,
+															  tiempoCaida,
+															  especialPendiente,
+															  pila,
+															  cola,
+															  colaEventos
+															  );
+													 
+													 if (modoReplay)
 													 {
-														 cout
-															 << "REPLAY: ATRAS"
-															 << endl;
+														 ventana.setTitle(
+																		  "REPLAY - Tetris"
+																		  );
 													 }
 													 }
 														  
@@ -865,23 +877,24 @@ int main()
 													 replayAutomatico =
 														 false;
 													 
-													 if (
-														 rehacer(
-																 historial,
-																 tablero,
-																 pieza,
-																 puntaje,
-																 lineasTotales,
-																 tiempoCaida,
-																 especialPendiente,
-																 pila,
-																 cola,
-																 colaEventos
-																 ))
+													 rehacer(
+															 historial,
+															 tablero,
+															 pieza,
+															 puntaje,
+															 lineasTotales,
+															 tiempoCaida,
+															 especialPendiente,
+															 pila,
+															 cola,
+															 colaEventos
+															 );
+													 
+													 if (modoReplay)
 													 {
-														 cout
-															 << "REPLAY: ADELANTE"
-															 << endl;
+														 ventana.setTitle(
+																		  "REPLAY - Tetris"
+																		  );
 													 }
 														  }
 														  
@@ -964,25 +977,12 @@ int main()
 																					 replayAutomatico =
 																						 false;
 																					 
+																					 modoReplay =
+																						 false;
+																					 
 																					 ventana.setTitle(
 																									  "GAME OVER - Tetris"
 																									  );
-																					 
-																					 cout
-																						 << "GAME OVER"
-																						 << endl;
-																					 
-																					 cout
-																						 << "R = Replay"
-																						 << endl;
-																					 
-																					 cout
-																						 << "Z = Retroceder"
-																						 << endl;
-																					 
-																					 cout
-																						 << "Y = Avanzar"
-																						 << endl;
 																				 }
 																			 }
 																			 
@@ -1017,12 +1017,8 @@ int main()
 																		  false;
 																	  
 																	  ventana.setTitle(
-																					   "GAME OVER - Tetris"
+																					   "REPLAY - Tetris"
 																					   );
-																	  
-																	  cout
-																		  << "REPLAY FINALIZADO"
-																		  << endl;
 																  }
 																			   
 																			   relojReplay.restart();
@@ -1054,6 +1050,14 @@ int main()
 																					 puntaje,
 																					 lineasTotales
 																					 );
+																  
+																  dibujarControlesReplay(
+																						 ventana,
+																						 fuente,
+																						 juegoTerminado,
+																						 modoReplay,
+																						 replayAutomatico
+																						 );
 																  
 																  ventana.display();
 							 }

@@ -32,4 +32,11 @@ void dibujarInformacion(
 						int lineasTotales
 						);
 
+void dibujarControlesReplay(
+							sf::RenderWindow &ventana,
+							sf::Font &fuente,
+							bool juegoTerminado,
+							bool modoReplay,
+							bool replayAutomatico
+							);
 #endif

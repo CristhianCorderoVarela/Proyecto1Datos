@@ -381,3 +381,127 @@ void dibujarInformacion(
 				 textoLineas
 				 );
 }
+
+
+void dibujarControlesReplay(
+							sf::RenderWindow &ventana,
+							sf::Font &fuente,
+							bool juegoTerminado,
+							bool modoReplay,
+							bool replayAutomatico)
+{
+	if (!juegoTerminado)
+	{
+		return;
+	}
+	
+	sf::RectangleShape fondo(
+							 sf::Vector2f(
+										  400,
+										  85
+										  )
+							 );
+	
+	fondo.setPosition(
+					  25,
+					  550
+					  );
+	
+	fondo.setFillColor(
+					   sf::Color(
+								 0,
+								 0,
+								 0,
+								 210
+								 )
+					   );
+	
+	fondo.setOutlineThickness(2);
+	
+	fondo.setOutlineColor(
+						  sf::Color::White
+						  );
+	
+	ventana.draw(
+				 fondo
+				 );
+	
+	sf::Text titulo;
+	
+	titulo.setFont(
+				   fuente
+				   );
+	
+	titulo.setCharacterSize(
+							22
+							);
+	
+	titulo.setFillColor(
+						sf::Color::White
+						);
+	
+	if (!modoReplay)
+	{
+		titulo.setString(
+						 "GAME OVER"
+						 );
+	}
+	else if (replayAutomatico)
+	{
+		titulo.setString(
+						 "REPLAY"
+						 );
+	}
+	else
+	{
+		titulo.setString(
+						 "REPLAY PAUSADO"
+						 );
+	}
+	
+	titulo.setPosition(
+					   40,
+					   558
+					   );
+	
+	ventana.draw(
+				 titulo
+				 );
+	
+	sf::Text controles;
+	
+	controles.setFont(
+					  fuente
+					  );
+	
+	controles.setCharacterSize(
+							   13
+							   );
+	
+	controles.setFillColor(
+						   sf::Color(
+									 220,
+									 220,
+									 220
+									 )
+						   );
+	
+	controles.setString(
+						"R - Replay   Z - Atras   Y - Adelante   ESC - Salir"
+						);
+	
+	controles.setPosition(
+						  40,
+						  590
+						  );
+	
+	ventana.draw(
+				 controles
+				 );
+}
+
+
+
+
+
+
