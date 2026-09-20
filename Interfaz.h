@@ -39,4 +39,15 @@ void dibujarControlesReplay(
 							bool modoReplay,
 							bool replayAutomatico
 							);
+
+
+void dibujarPantallaInicio(
+						   sf::RenderWindow &ventana,
+						   sf::Font &fuente
+						   );
+
+void dibujarPantallaPausa(
+						  sf::RenderWindow &ventana,
+						  sf::Font &fuente
+						  );
 #endif

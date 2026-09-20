@@ -38,10 +38,12 @@ void procesarEventos(
 					  eventoActivado
 					  );
 		
-		if (eventoActivado.tipo ==
+		if (
+			eventoActivado.tipo ==
 			AUMENTAR_VELOCIDAD)
 		{
-			tiempoCaida = 0.45f;
+			tiempoCaida =
+				0.45f;
 			
 			cout
 				<< "EVENTO ACTIVADO: "
@@ -54,12 +56,13 @@ void procesarEventos(
 				<< " segundos"
 				<< endl;
 		}
-		
+			
 		else if (
 				 eventoActivado.tipo ==
 				 BONO_PUNTOS)
-		{
-			puntaje += 500;
+			{
+			puntaje +=
+				500;
 			
 			cout
 				<< "EVENTO ACTIVADO: "
@@ -74,13 +77,14 @@ void procesarEventos(
 				<< "Puntaje total: "
 				<< puntaje
 				<< endl;
-		}
+			}
 				 
 		else if (
 				 eventoActivado.tipo ==
 				 PIEZA_ESPECIAL)
 				 {
-			especialPendiente = true;
+			especialPendiente =
+				true;
 			
 			cout
 				<< "EVENTO ACTIVADO: "
@@ -248,6 +252,12 @@ int main()
 							 float tiempoReplay =
 								 0.15f;
 							 
+							 bool juegoIniciado =
+								 false;
+							 
+							 bool juegoPausado =
+								 false;
+							 
 							 bool juegoTerminado =
 								 false;
 							 
@@ -359,12 +369,191 @@ int main()
 											 evento.type ==
 											 sf::Event::KeyPressed)
 										 {
-											 if (!juegoTerminado)
+											 if (
+												 evento.key.code ==
+												 sf::Keyboard::Escape)
+											 {
+												 ventana.close();
+											 }
+												 
+											 else if (!juegoIniciado)
+												 {
+												 if (
+													 evento.key.code ==
+													 sf::Keyboard::Return)
+												 {
+													 juegoIniciado =
+														 true;
+													 
+													 juegoPausado =
+														 false;
+													 
+													 relojCaida.restart();
+													 
+													 ventana.setTitle(
+																	  "Tetris - Proyecto I"
+																	  );
+												 }
+												 }
+											 
+											 else if (juegoTerminado)
 											 {
 												 if (
 													 evento.key.code ==
-													 sf::Keyboard::A)
+													 sf::Keyboard::R)
 												 {
+													 if (!modoReplay)
+													 {
+														 if (
+															 irInicioHistorial(
+																			   historial,
+																			   tablero,
+																			   pieza,
+																			   puntaje,
+																			   lineasTotales,
+																			   tiempoCaida,
+																			   especialPendiente,
+																			   pila,
+																			   cola,
+																			   colaEventos
+																			   ))
+														 {
+															 modoReplay =
+																 true;
+															 
+															 replayAutomatico =
+																 true;
+															 
+															 relojReplay.restart();
+															 
+															 ventana.setTitle(
+																			  "REPLAY - Tetris"
+																			  );
+														 }
+													 }
+													 else
+													 {
+														 if (
+															 historial.actual ==
+															 historial.ultimo)
+														 {
+															 irInicioHistorial(
+																			   historial,
+																			   tablero,
+																			   pieza,
+																			   puntaje,
+																			   lineasTotales,
+																			   tiempoCaida,
+																			   especialPendiente,
+																			   pila,
+																			   cola,
+																			   colaEventos
+																			   );
+														 }
+															 
+															 replayAutomatico =
+															 true;
+															 
+															 relojReplay.restart();
+															 
+															 ventana.setTitle(
+																			  "REPLAY - Tetris"
+																			  );
+													 }
+												 }
+													 
+												 else if (
+														  evento.key.code ==
+														  sf::Keyboard::Z)
+													 {
+													 replayAutomatico =
+														 false;
+													 
+													 deshacer(
+															  historial,
+															  tablero,
+															  pieza,
+															  puntaje,
+															  lineasTotales,
+															  tiempoCaida,
+															  especialPendiente,
+															  pila,
+															  cola,
+															  colaEventos
+															  );
+													 
+													 if (modoReplay)
+													 {
+														 ventana.setTitle(
+																		  "REPLAY - Tetris"
+																		  );
+													 }
+													 }
+														  
+												 else if (
+														  evento.key.code ==
+														  sf::Keyboard::Y)
+														  {
+													 replayAutomatico =
+														 false;
+													 
+													 rehacer(
+															 historial,
+															 tablero,
+															 pieza,
+															 puntaje,
+															 lineasTotales,
+															 tiempoCaida,
+															 especialPendiente,
+															 pila,
+															 cola,
+															 colaEventos
+															 );
+													 
+													 if (modoReplay)
+													 {
+														 ventana.setTitle(
+																		  "REPLAY - Tetris"
+																		  );
+													 }
+														  }
+											 }
+											 
+											 else if (juegoPausado)
+											 {
+												 if (
+													 evento.key.code ==
+													 sf::Keyboard::P)
+												 {
+													 juegoPausado =
+														 false;
+													 
+													 relojCaida.restart();
+													 
+													 ventana.setTitle(
+																	  "Tetris - Proyecto I"
+																	  );
+												 }
+											 }
+											 
+											 else
+											 {
+												 if (
+													 evento.key.code ==
+													 sf::Keyboard::P)
+												 {
+													 juegoPausado =
+														 true;
+													 
+													 ventana.setTitle(
+																	  "PAUSA - Tetris"
+																	  );
+												 }
+													 
+												 else if (
+														  evento.key.code ==
+														  sf::Keyboard::A)
+													 {
 													 if (
 														 moverPiezaHorizontal(
 																			  tablero,
@@ -386,12 +575,12 @@ int main()
 																		 'A'
 																		 );
 													 }
-												 }
-													 
+													 }
+														  
 												 else if (
 														  evento.key.code ==
 														  sf::Keyboard::D)
-													 {
+														  {
 													 if (
 														 moverPiezaHorizontal(
 																			  tablero,
@@ -413,7 +602,7 @@ int main()
 																		 'D'
 																		 );
 													 }
-													 }
+														  }
 														  
 												 else if (
 														  evento.key.code ==
@@ -714,9 +903,6 @@ int main()
 														  evento.key.code ==
 														  sf::Keyboard::Z)
 														  {
-													 replayAutomatico =
-														 false;
-													 
 													 if (
 														 deshacer(
 																  historial,
@@ -743,9 +929,6 @@ int main()
 														  evento.key.code ==
 														  sf::Keyboard::Y)
 														  {
-													 replayAutomatico =
-														 false;
-													 
 													 if (
 														 rehacer(
 																 historial,
@@ -767,148 +950,15 @@ int main()
 														 relojCaida.restart();
 													 }
 														  }
-														  
-												 else if (
-														  evento.key.code ==
-														  sf::Keyboard::Escape)
-														  {
-													 ventana.close();
-														  }
-											 }
-											 
-											 else
-											 {
-												 if (
-													 evento.key.code ==
-													 sf::Keyboard::R)
-												 {
-													 if (!modoReplay)
-													 {
-														 if (
-															 irInicioHistorial(
-																			   historial,
-																			   tablero,
-																			   pieza,
-																			   puntaje,
-																			   lineasTotales,
-																			   tiempoCaida,
-																			   especialPendiente,
-																			   pila,
-																			   cola,
-																			   colaEventos
-																			   ))
-														 {
-															 modoReplay =
-																 true;
-															 
-															 replayAutomatico =
-																 true;
-															 
-															 relojReplay.restart();
-															 
-															 ventana.setTitle(
-																			  "REPLAY - Tetris"
-																			  );
-														 }
-													 }
-													 else
-													 {
-														 if (
-															 historial.actual ==
-															 historial.ultimo)
-														 {
-															 irInicioHistorial(
-																			   historial,
-																			   tablero,
-																			   pieza,
-																			   puntaje,
-																			   lineasTotales,
-																			   tiempoCaida,
-																			   especialPendiente,
-																			   pila,
-																			   cola,
-																			   colaEventos
-																			   );
-														 }
-															 
-															 replayAutomatico =
-															 true;
-															 
-															 relojReplay.restart();
-															 
-															 ventana.setTitle(
-																			  "REPLAY - Tetris"
-																			  );
-													 }
-												 }
-													 
-												 else if (
-														  evento.key.code ==
-														  sf::Keyboard::Z)
-													 {
-													 replayAutomatico =
-														 false;
-													 
-													 deshacer(
-															  historial,
-															  tablero,
-															  pieza,
-															  puntaje,
-															  lineasTotales,
-															  tiempoCaida,
-															  especialPendiente,
-															  pila,
-															  cola,
-															  colaEventos
-															  );
-													 
-													 if (modoReplay)
-													 {
-														 ventana.setTitle(
-																		  "REPLAY - Tetris"
-																		  );
-													 }
-													 }
-														  
-												 else if (
-														  evento.key.code ==
-														  sf::Keyboard::Y)
-														  {
-													 replayAutomatico =
-														 false;
-													 
-													 rehacer(
-															 historial,
-															 tablero,
-															 pieza,
-															 puntaje,
-															 lineasTotales,
-															 tiempoCaida,
-															 especialPendiente,
-															 pila,
-															 cola,
-															 colaEventos
-															 );
-													 
-													 if (modoReplay)
-													 {
-														 ventana.setTitle(
-																		  "REPLAY - Tetris"
-																		  );
-													 }
-														  }
-														  
-												 else if (
-														  evento.key.code ==
-														  sf::Keyboard::Escape)
-														  {
-													 ventana.close();
-														  }
 											 }
 										 }
 								 }
 														  
 														  if (
+															  juegoIniciado
+															  &&
+															  !juegoPausado
+															  &&
 															  !juegoTerminado
 															  &&
 															  historial.actual ==
@@ -1028,36 +1078,57 @@ int main()
 																				sf::Color::Black
 																				);
 																  
-																  dibujarTablero(
-																				 ventana,
-																				 tablero,
-																				 pieza
-																				 );
-																  
-																  dibujarProximas(
-																				  ventana,
-																				  cola
-																				  );
-																  
-																  dibujarEspera(
-																				ventana,
-																				pila
-																				);
-																  
-																  dibujarInformacion(
+																  if (!juegoIniciado)
+																  {
+																	  dibujarPantallaInicio(
+																							ventana,
+																							fuente
+																							);
+																  }
+																  else
+																  {
+																	  dibujarTablero(
 																					 ventana,
-																					 fuente,
-																					 puntaje,
-																					 lineasTotales
+																					 tablero,
+																					 pieza
 																					 );
-																  
-																  dibujarControlesReplay(
+																	  
+																	  dibujarProximas(
+																					  ventana,
+																					  cola
+																					  );
+																	  
+																	  dibujarEspera(
+																					ventana,
+																					pila
+																					);
+																	  
+																	  dibujarInformacion(
 																						 ventana,
 																						 fuente,
-																						 juegoTerminado,
-																						 modoReplay,
-																						 replayAutomatico
+																						 puntaje,
+																						 lineasTotales
 																						 );
+																	  
+																	  if (juegoPausado)
+																	  {
+																		  dibujarPantallaPausa(
+																							   ventana,
+																							   fuente
+																							   );
+																	  }
+																	  
+																	  if (juegoTerminado)
+																	  {
+																		  dibujarControlesReplay(
+																								 ventana,
+																								 fuente,
+																								 juegoTerminado,
+																								 modoReplay,
+																								 replayAutomatico
+																								 );
+																	  }
+																  }
 																  
 																  ventana.display();
 							 }

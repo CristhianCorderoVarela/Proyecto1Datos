@@ -501,6 +501,361 @@ void dibujarControlesReplay(
 }
 
 
+void dibujarPantallaInicio(
+						   sf::RenderWindow &ventana,
+						   sf::Font &fuente)
+{
+	float anchoVentana =
+		static_cast<float>(ventana.getSize().x);
+	
+	sf::RectangleShape panel(
+							 sf::Vector2f(
+										  360,
+										  330
+										  )
+							 );
+	
+	panel.setPosition(
+					  55,
+					  145
+					  );
+	
+	panel.setFillColor(
+					   sf::Color(
+								 15,
+								 15,
+								 15
+								 )
+					   );
+	
+	panel.setOutlineThickness(2);
+	panel.setOutlineColor(
+						  sf::Color(
+									100,
+									100,
+									100
+									)
+						  );
+	
+	ventana.draw(panel);
+	
+	auto dibujarFiguraPequena =
+		[&](char tipo,
+			float x,
+			float y,
+			sf::Color color)
+	{
+			const float tam = 12.0f;
+			
+			auto dibujarBloque =
+				[&](int fila, int columna)
+			{
+					sf::RectangleShape bloque(
+											  sf::Vector2f(
+														   tam - 1,
+														   tam - 1
+														   )
+											  );
+					
+					bloque.setPosition(
+									   x + columna * tam,
+									   y + fila * tam
+									   );
+					
+					bloque.setFillColor(color);
+					ventana.draw(bloque);
+				};
+				
+				if (tipo == 'I')
+				{
+					dibujarBloque(0, 0);
+					dibujarBloque(0, 1);
+					dibujarBloque(0, 2);
+					dibujarBloque(0, 3);
+				}
+				else if (tipo == 'O')
+				{
+					dibujarBloque(0, 0);
+					dibujarBloque(0, 1);
+					dibujarBloque(1, 0);
+					dibujarBloque(1, 1);
+				}
+				else if (tipo == 'T')
+				{
+					dibujarBloque(0, 0);
+					dibujarBloque(0, 1);
+					dibujarBloque(0, 2);
+					dibujarBloque(1, 1);
+				}
+				else if (tipo == 'S')
+				{
+					dibujarBloque(0, 1);
+					dibujarBloque(0, 2);
+					dibujarBloque(1, 0);
+					dibujarBloque(1, 1);
+				}
+				else if (tipo == 'Z')
+				{
+					dibujarBloque(0, 0);
+					dibujarBloque(0, 1);
+					dibujarBloque(1, 1);
+					dibujarBloque(1, 2);
+				}
+				else if (tipo == 'J')
+				{
+					dibujarBloque(0, 0);
+					dibujarBloque(1, 0);
+					dibujarBloque(1, 1);
+					dibujarBloque(1, 2);
+				}
+				else if (tipo == 'L')
+				{
+					dibujarBloque(0, 2);
+					dibujarBloque(1, 0);
+					dibujarBloque(1, 1);
+					dibujarBloque(1, 2);
+				}
+		};
+		
+		dibujarFiguraPequena('T', 20, 25, sf::Color(160, 32, 240));
+		dibujarFiguraPequena('L', 85, 35, sf::Color(255, 140, 0));
+		dibujarFiguraPequena('O', 390, 25, sf::Color::Yellow);
+		dibujarFiguraPequena('S', 430, 55, sf::Color::Green);
+		
+		dibujarFiguraPequena('I', 15, 120, sf::Color::Cyan);
+		dibujarFiguraPequena('Z', 420, 145, sf::Color::Red);
+		
+		dibujarFiguraPequena('J', 18, 500, sf::Color::Blue);
+		dibujarFiguraPequena('S', 75, 555, sf::Color::Green);
+		dibujarFiguraPequena('L', 385, 515, sf::Color(255, 140, 0));
+		dibujarFiguraPequena('T', 425, 560, sf::Color(160, 32, 240));
+		
+		dibujarFiguraPequena('O', 25, 300, sf::Color::Yellow);
+		dibujarFiguraPequena('Z', 425, 310, sf::Color::Red);
+		
+		
+		sf::Text titulo;
+		
+		titulo.setFont(fuente);
+		titulo.setString("TETRIS");
+		titulo.setCharacterSize(46);
+		titulo.setFillColor(sf::Color::White);
+		
+		sf::FloatRect limitesTitulo =
+			titulo.getLocalBounds();
+		
+		titulo.setPosition(
+						   (anchoVentana - limitesTitulo.width) / 2,
+						   215
+						   );
+		
+		ventana.draw(titulo);
+		
+		sf::Text subtitulo;
+		
+		subtitulo.setFont(fuente);
+		subtitulo.setString("PROYECTO I");
+		subtitulo.setCharacterSize(15);
+		subtitulo.setFillColor(
+							   sf::Color(
+										 170,
+										 170,
+										 170
+										 )
+							   );
+		
+		sf::FloatRect limitesSubtitulo =
+			subtitulo.getLocalBounds();
+		
+		subtitulo.setPosition(
+							  (anchoVentana - limitesSubtitulo.width) / 2,
+							  275
+							  );
+		
+		ventana.draw(subtitulo);
+		
+		sf::RectangleShape linea(
+								 sf::Vector2f(
+											  260,
+											  1
+											  )
+								 );
+		
+		linea.setPosition(
+						  105,
+						  310
+						  );
+		
+		linea.setFillColor(
+						   sf::Color(
+									 80,
+									 80,
+									 80
+									 )
+						   );
+		
+		ventana.draw(linea);
+		
+		sf::Text iniciar;
+		
+		iniciar.setFont(fuente);
+		iniciar.setString("ENTER - INICIAR");
+		iniciar.setCharacterSize(21);
+		iniciar.setFillColor(sf::Color::White);
+		
+		sf::FloatRect limitesIniciar =
+			iniciar.getLocalBounds();
+		
+		iniciar.setPosition(
+							(anchoVentana - limitesIniciar.width) / 2,
+							335
+							);
+		
+		ventana.draw(iniciar);
+		
+		sf::Text salir;
+		
+		salir.setFont(fuente);
+		salir.setString("ESC - SALIR");
+		salir.setCharacterSize(16);
+		salir.setFillColor(
+						   sf::Color(
+									 180,
+									 180,
+									 180
+									 )
+						   );
+		
+		sf::FloatRect limitesSalir =
+			salir.getLocalBounds();
+		
+		salir.setPosition(
+						  (anchoVentana - limitesSalir.width) / 2,
+						  375
+						  );
+		
+		ventana.draw(salir);
+		
+		sf::Text controles;
+		
+		controles.setFont(fuente);
+		controles.setString(
+							"A/D Mover   W Rotar   S Bajar\n"
+							"X Caida   H Guardar   P Pausa"
+							);
+		controles.setCharacterSize(13);
+		controles.setFillColor(
+							   sf::Color(
+										 130,
+										 130,
+										 130
+										 )
+							   );
+		
+		sf::FloatRect limitesControles =
+			controles.getLocalBounds();
+		
+		controles.setPosition(
+							  (anchoVentana - limitesControles.width) / 2,
+							  420
+							  );
+		
+		ventana.draw(controles);
+}
+
+void dibujarPantallaPausa(
+						  sf::RenderWindow &ventana,
+						  sf::Font &fuente)
+{
+	sf::RectangleShape fondo(
+							 sf::Vector2f(
+										  400,
+										  85
+										  )
+							 );
+	
+	fondo.setPosition(
+					  25,
+					  550
+					  );
+	
+	fondo.setFillColor(
+					   sf::Color(
+								 0,
+								 0,
+								 0,
+								 210
+								 )
+					   );
+	
+	fondo.setOutlineThickness(
+							  2
+							  );
+	
+	fondo.setOutlineColor(
+						  sf::Color::White
+						  );
+	
+	ventana.draw(
+				 fondo
+				 );
+	
+	sf::Text titulo;
+	
+	titulo.setFont(
+				   fuente
+				   );
+	
+	titulo.setString(
+					 "PAUSA"
+					 );
+	
+	titulo.setCharacterSize(
+							22
+							);
+	
+	titulo.setFillColor(
+						sf::Color::White
+						);
+	
+	titulo.setPosition(
+					   40,
+					   558
+					   );
+	
+	ventana.draw(
+				 titulo
+				 );
+	
+	sf::Text controles;
+	
+	controles.setFont(
+					  fuente
+					  );
+	
+	controles.setString(
+						"P - Continuar        ESC - Salir"
+						);
+	
+	controles.setCharacterSize(
+							   14
+							   );
+	
+	controles.setFillColor(
+						   sf::Color(220, 220, 220)
+						   );
+	
+	controles.setPosition(
+						  40,
+						  590
+						  );
+	
+	ventana.draw(
+				 controles
+				 );
+}
+
+
 
 
 
