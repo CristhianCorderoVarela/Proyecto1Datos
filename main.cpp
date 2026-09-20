@@ -107,7 +107,10 @@ bool fijarYCrearNuevaPieza(
 						   int &lineasTotales,
 						   ColaEventos &colaEventos,
 						   float &tiempoCaida,
-						   bool &especialPendiente)
+						   bool &especialPendiente,
+						   sf::RenderWindow &ventana,
+						   sf::Font &fuente,
+						   PilaEspera pila)
 {
 	bool eraEspecial =
 		pieza.especial;
@@ -116,6 +119,17 @@ bool fijarYCrearNuevaPieza(
 				 tablero,
 				 pieza
 				 );
+	
+	animarFilasCompletas(
+						 ventana,
+						 tablero,
+						 pieza,
+						 cola,
+						 pila,
+						 fuente,
+						 puntaje,
+						 lineasTotales
+						 );
 	
 	int eliminadas =
 		eliminarFilasCompletas(
@@ -665,7 +679,10 @@ int main()
 																								  lineasTotales,
 																								  colaEventos,
 																								  tiempoCaida,
-																								  especialPendiente
+																								  especialPendiente,
+																								  ventana,
+																								  fuente,
+																								  pila
 																								  );
 																		
 																		if (continua)
@@ -861,7 +878,10 @@ int main()
 																								 lineasTotales,
 																								 colaEventos,
 																								 tiempoCaida,
-																								 especialPendiente
+																								 especialPendiente,
+																								 ventana,
+																								 fuente,
+																								 pila
 																								 );
 																	   
 																	   if (continua)
@@ -1000,7 +1020,10 @@ int main()
 																										   lineasTotales,
 																										   colaEventos,
 																										   tiempoCaida,
-																										   especialPendiente
+																										   especialPendiente,
+																										   ventana,
+																										   fuente,
+																										   pila
 																										   );
 																				 
 																				 if (continua)

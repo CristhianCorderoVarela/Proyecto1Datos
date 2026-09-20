@@ -50,4 +50,15 @@ void dibujarPantallaPausa(
 						  sf::RenderWindow &ventana,
 						  sf::Font &fuente
 						  );
+
+void animarFilasCompletas(
+						  sf::RenderWindow &ventana,
+						  Tablero tablero,
+						  Pieza pieza,
+						  ColaPiezas cola,
+						  PilaEspera pila,
+						  sf::Font &fuente,
+						  int puntaje,
+						  int lineasTotales
+						  );
 #endif

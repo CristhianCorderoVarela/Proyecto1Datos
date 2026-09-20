@@ -856,6 +856,146 @@ void dibujarPantallaPausa(
 }
 
 
+void animarFilasCompletas(
+						  sf::RenderWindow &ventana,
+						  Tablero tablero,
+						  Pieza pieza,
+						  ColaPiezas cola,
+						  PilaEspera pila,
+						  sf::Font &fuente,
+						  int puntaje,
+						  int lineasTotales)
+{
+	int filasCompletas[4];
+	int cantidad = 0;
+	
+	NodoFila *actual =
+		tablero.inicio;
+	
+	for (int fila = 0;
+	fila < 20 &&
+		actual != nullptr;
+	fila++)
+	{
+		bool completa =
+			true;
+		
+		for (int columna = 0;
+		columna < 10;
+		columna++)
+		{
+			if (
+				actual->celdas[columna] ==
+				0)
+			{
+				completa =
+					false;
+				
+				break;
+			}
+		}
+		
+		if (
+			completa &&
+			cantidad < 4)
+		{
+			filasCompletas[cantidad] =
+				fila;
+			
+			cantidad++;
+		}
+			
+			actual =
+			actual->siguiente;
+	}
+	
+	if (cantidad == 0)
+	{
+		return;
+	}
+	
+	for (int paso = 0;
+	paso < 3;
+	paso++)
+	{
+		ventana.clear(
+					  sf::Color::Black
+					  );
+		
+		dibujarTablero(
+					   ventana,
+					   tablero,
+					   pieza
+					   );
+		
+		dibujarProximas(
+						ventana,
+						cola
+						);
+		
+		dibujarEspera(
+					  ventana,
+					  pila
+					  );
+		
+		dibujarInformacion(
+						   ventana,
+						   fuente,
+						   puntaje,
+						   lineasTotales
+						   );
+		
+		if (
+			paso == 0 ||
+			paso == 2)
+		{
+			for (int i = 0;
+			i < cantidad;
+			i++)
+			{
+				int fila =
+					filasCompletas[i];
+				
+				for (int columna = 0;
+				columna < 10;
+				columna++)
+				{
+					sf::RectangleShape celda(
+											 sf::Vector2f(
+														  TAM_CELDA - 1,
+														  TAM_CELDA - 1
+														  )
+											 );
+					
+					celda.setPosition(
+									  INICIO_X +
+									  columna *
+									  TAM_CELDA,
+									  INICIO_Y +
+									  fila *
+									  TAM_CELDA
+									  );
+					
+					celda.setFillColor(
+									   sf::Color::White
+									   );
+					
+					ventana.draw(
+								 celda
+								 );
+				}
+			}
+		}
+			
+			ventana.display();
+			
+			sf::sleep(
+					  sf::milliseconds(90)
+					  );
+	}
+}
+
+
 
 
 
