@@ -6,6 +6,7 @@
 #include "Pieza.h"
 #include "ColaPiezas.h"
 #include "PilaEspera.h"
+#include <string>
 
 sf::Color obtenerColorPieza(char tipo);
 
@@ -61,4 +62,11 @@ void animarFilasCompletas(
 						  int puntaje,
 						  int lineasTotales
 						  );
+
+void dibujarPantallaConfiguracion(
+								  sf::RenderWindow &ventana,
+								  sf::Font &fuente,
+								  std::string nombreJugador,
+								  int algoritmoOrdenamiento
+								  );
 #endif

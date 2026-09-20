@@ -996,6 +996,290 @@ void animarFilasCompletas(
 }
 
 
+void dibujarPantallaConfiguracion(
+								  sf::RenderWindow &ventana,
+								  sf::Font &fuente,
+								  std::string nombreJugador,
+								  int algoritmoOrdenamiento)
+{
+	sf::RectangleShape panel(
+							 sf::Vector2f(
+										  380,
+										  390
+										  )
+							 );
+	
+	panel.setPosition(
+					  45,
+					  125
+					  );
+	
+	panel.setFillColor(
+					   sf::Color(
+								 15,
+								 15,
+								 15
+								 )
+					   );
+	
+	panel.setOutlineThickness(2);
+	
+	panel.setOutlineColor(
+						  sf::Color(
+									100,
+									100,
+									100
+									)
+						  );
+	
+	ventana.draw(panel);
+	
+	sf::Text titulo;
+	
+	titulo.setFont(fuente);
+	
+	titulo.setString(
+					 "CONFIGURACION"
+					 );
+	
+	titulo.setCharacterSize(30);
+	
+	titulo.setFillColor(
+						sf::Color::White
+						);
+	
+	sf::FloatRect limitesTitulo =
+		titulo.getLocalBounds();
+	
+	titulo.setPosition(
+					   (470 -
+						limitesTitulo.width) / 2,
+					   155
+					   );
+	
+	ventana.draw(titulo);
+	
+	sf::Text etiquetaNombre;
+	
+	etiquetaNombre.setFont(fuente);
+	
+	etiquetaNombre.setString(
+							 "Nombre del jugador:"
+							 );
+	
+	etiquetaNombre.setCharacterSize(17);
+	
+	etiquetaNombre.setFillColor(
+								sf::Color(
+										  190,
+										  190,
+										  190
+										  )
+								);
+	
+	etiquetaNombre.setPosition(
+							   80,
+							   225
+							   );
+	
+	ventana.draw(
+				 etiquetaNombre
+				 );
+	
+	sf::RectangleShape cajaNombre(
+								  sf::Vector2f(
+											   310,
+											   45
+											   )
+								  );
+	
+	cajaNombre.setPosition(
+						   80,
+						   255
+						   );
+	
+	cajaNombre.setFillColor(
+							sf::Color(
+									  25,
+									  25,
+									  25
+									  )
+							);
+	
+	cajaNombre.setOutlineThickness(2);
+	
+	cajaNombre.setOutlineColor(
+							   sf::Color(
+										 90,
+										 90,
+										 90
+										 )
+							   );
+	
+	ventana.draw(
+				 cajaNombre
+				 );
+	
+	sf::Text textoNombre;
+	
+	textoNombre.setFont(fuente);
+	
+	textoNombre.setString(
+						  nombreJugador + "_"
+						  );
+	
+	textoNombre.setCharacterSize(20);
+	
+	textoNombre.setFillColor(
+							 sf::Color::White
+							 );
+	
+	textoNombre.setPosition(
+							95,
+							264
+							);
+	
+	ventana.draw(
+				 textoNombre
+				 );
+	
+	sf::Text etiquetaAlgoritmo;
+	
+	etiquetaAlgoritmo.setFont(fuente);
+	
+	etiquetaAlgoritmo.setString(
+								"Ordenamiento:"
+								);
+	
+	etiquetaAlgoritmo.setCharacterSize(17);
+	
+	etiquetaAlgoritmo.setFillColor(
+								   sf::Color(
+											 190,
+											 190,
+											 190
+											 )
+								   );
+	
+	etiquetaAlgoritmo.setPosition(
+								  80,
+								  330
+								  );
+	
+	ventana.draw(
+				 etiquetaAlgoritmo
+				 );
+	
+	sf::Text textoAlgoritmo;
+	
+	textoAlgoritmo.setFont(fuente);
+	
+	if (algoritmoOrdenamiento == 1)
+	{
+		textoAlgoritmo.setString(
+								 "Bubble Sort"
+								 );
+	}
+	else
+	{
+		textoAlgoritmo.setString(
+								 "Merge Sort"
+								 );
+	}
+	
+	textoAlgoritmo.setCharacterSize(22);
+	
+	textoAlgoritmo.setFillColor(
+								sf::Color::White
+								);
+	
+	textoAlgoritmo.setPosition(
+							   80,
+							   360
+							   );
+	
+	ventana.draw(
+				 textoAlgoritmo
+				 );
+	
+	sf::Text cambiar;
+	
+	cambiar.setFont(fuente);
+	
+	cambiar.setString(
+					  "TAB - Cambiar algoritmo"
+					  );
+	
+	cambiar.setCharacterSize(14);
+	
+	cambiar.setFillColor(
+						 sf::Color(
+								   150,
+								   150,
+								   150
+								   )
+						 );
+	
+	cambiar.setPosition(
+						80,
+						400
+						);
+	
+	ventana.draw(
+				 cambiar
+				 );
+	
+	sf::Text jugar;
+	
+	jugar.setFont(fuente);
+	
+	jugar.setString(
+					"ENTER - Jugar"
+					);
+	
+	jugar.setCharacterSize(18);
+	
+	jugar.setFillColor(
+					   sf::Color::White
+					   );
+	
+	jugar.setPosition(
+					  80,
+					  450
+					  );
+	
+	ventana.draw(
+				 jugar
+				 );
+	
+	sf::Text volver;
+	
+	volver.setFont(fuente);
+	
+	volver.setString(
+					 "ESC - Volver"
+					 );
+	
+	volver.setCharacterSize(14);
+	
+	volver.setFillColor(
+						sf::Color(
+								  150,
+								  150,
+								  150
+								  )
+						);
+	
+	volver.setPosition(
+					   80,
+					   480
+					   );
+	
+	ventana.draw(
+				 volver
+				 );
+}
+
 
 
 
