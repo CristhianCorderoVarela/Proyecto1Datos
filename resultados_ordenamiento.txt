@@ -1,0 +1,23 @@
+RESULTADOS DE PRUEBAS DE ORDENAMIENTO
+=====================================
+
+Cantidad de registros: 10
+Bubble Sort: 0 ms
+Merge Sort: 0 ms
+------------------------------
+Cantidad de registros: 100
+Bubble Sort: 0 ms
+Merge Sort: 0 ms
+------------------------------
+Cantidad de registros: 1000
+Bubble Sort: 15.6263 ms
+Merge Sort: 5.207 ms
+------------------------------
+Cantidad de registros: 10000
+Bubble Sort: 1791.68 ms
+Merge Sort: 5.198 ms
+------------------------------
+Cantidad de registros: 30000
+Bubble Sort: 16031.4 ms
+Merge Sort: 31.257 ms
+------------------------------

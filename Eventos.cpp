@@ -25,17 +25,14 @@ void insertarEvento(
 	nuevo->evento = evento;
 	nuevo->siguiente = nullptr;
 	
-	// CASO 1:
-	// La cola esta vacia
+	
 	if (cola.frente == nullptr)
 	{
 		cola.frente = nuevo;
 		return;
 	}
 	
-	// CASO 2:
-	// El nuevo evento ocurre antes
-	// que el evento del frente
+	
 	if (evento.momento <
 		cola.frente->evento.momento)
 	{
@@ -47,8 +44,7 @@ void insertarEvento(
 		return;
 	}
 	
-	// CASO 3:
-	// Buscar donde insertar
+	
 	NodoEvento *actual =
 		cola.frente;
 	
